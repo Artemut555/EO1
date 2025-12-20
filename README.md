@@ -93,7 +93,7 @@ MAX_JOBS=4 pip install flash-attn==2.8.3 --no-build-isolation
 
 ### Getting Started Tutorials
 
-- [Load Dataset and Customization](getting_started/1_load_dataset.ipynb) - Learn how to load and customize datasets in LeRobot format
+- [Load Dataset and Customization](getting_started/1_load_dataset.ipynb) - Learn how to load and customize datasets in LeRobot format; Load and visualize datasets in the Parquet format
 - [Fine-tuning on Custom Data](getting_started/2_train_finetune.ipynb) - Step-by-step guide for training EO-1 on your own data
 - [Evaluation and Deployment](getting_started/3_eval_deploy.ipynb) - Deploy trained models and run evaluations
 - [Advanced Pre-training](getting_started/4_advanced_pretrain.ipynb) - Large-scale pre-training workflows
@@ -309,7 +309,7 @@ Robot Control Benchmark Results
 
 - [x] 🤖 Release [EO-1](https://huggingface.co/IPEC-COMMUNITY/EO-1-3B) pretraining, finetune scripts, and documentations.
 - [x] Integrate into [LERobot](https://github.com/huggingface/lerobot). We have merged the [PR](https://github.com/huggingface/lerobot/pull/1971) into the main branch. You can now use EO-1 with LERobot without any modifications.
-- [x] 🤗 Release Interleaved Dataset [EO-Data1.5M](https://huggingface.co/datasets/IPEC-COMMUNITY/EO-Data1.5M) and benchmark [EO-Bench](https://huggingface.co/datasets/IPEC-COMMUNITY/EO-Bench). We also provide the Fintuned Model [eo1-qwen25_vl-fractal](https://huggingface.co/IPEC-COMMUNITY/eo1-qwen25_vl-fractal) and [eo1-qwen25_vl-bridge](https://huggingface.co/IPEC-COMMUNITY/eo1-qwen25_vl-bridge). NOTE: We have now updated our dataset to the [Parquet format](https://huggingface.co/datasets/IPEC-COMMUNITY/EO-Data1.5M). The meta_dataset has been deprecated — we no longer merge the LeRobot dataset with the multimodal dataset.
+- [x] 🤗 Release Interleaved Dataset [EO-Data1.5M](https://huggingface.co/datasets/IPEC-COMMUNITY/EO-Data1.5M) and benchmark [EO-Bench](https://huggingface.co/datasets/IPEC-COMMUNITY/EO-Bench). We also provide the Fintuned Model [eo1-qwen25_vl-fractal](https://huggingface.co/IPEC-COMMUNITY/eo1-qwen25_vl-fractal) and [eo1-qwen25_vl-bridge](https://huggingface.co/IPEC-COMMUNITY/eo1-qwen25_vl-bridge). NOTE: We have now updated our dataset to the [Parquet format](https://huggingface.co/datasets/IPEC-COMMUNITY/EO-Data1.5M). The meta_dataset has been deprecated — we no longer merge the LeRobot dataset with the multimodal dataset. Please see [1_load_dataset.ipynb](getting_started/1_load_dataset.ipynb) for more information about loading and visualizing the dataset.
 - [ ] 🤗 Release [pre-training models](https://huggingface.co/collections/IPEC-COMMUNITY/eo-robotics-68ac4ff30e1f746cac28ca14) (undergoing).
 - [ ] ⚡️ Efficient LLM Inference over Long Sequences, Efficient KV-cache, etc.
 - [ ] 🤖 Integrate with human feedback fine-tuning.
