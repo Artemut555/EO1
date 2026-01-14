@@ -1,5 +1,43 @@
 # pretraining example dataset config
-mm_datasets:
+mm_datasets:  
+  # EO-1.5M
+  - json_path: IPEC-COMMUNITY/EO-Data1.5M/qa-trajectory_qa
+    sampling_strategy: all
+  - json_path: IPEC-COMMUNITY/EO-Data1.5M/qa-object_referring_qa
+    sampling_strategy: all
+  - json_path: IPEC-COMMUNITY/EO-Data1.5M/interleave-trajectory
+    sampling_strategy: all
+  - json_path: IPEC-COMMUNITY/EO-Data1.5M/qa-relation_reasoning
+    sampling_strategy: all
+  - json_path: IPEC-COMMUNITY/EO-Data1.5M/qa-points_qa
+    sampling_strategy: all
+  - json_path: IPEC-COMMUNITY/EO-Data1.5M/qa-multiview_qa
+    sampling_strategy: all
+  - json_path: IPEC-COMMUNITY/EO-Data1.5M/qa-failure_detection
+    sampling_strategy: all
+  - json_path: IPEC-COMMUNITY/EO-Data1.5M/qa-episode_caption
+    sampling_strategy: all
+  - json_path: IPEC-COMMUNITY/EO-Data1.5M/qa-affordance_qa
+    sampling_strategy: all
+  - json_path: IPEC-COMMUNITY/EO-Data1.5M/qa-physical_common_sense
+    sampling_strategy: all
+  - json_path: IPEC-COMMUNITY/EO-Data1.5M/qa-process_verification
+    sampling_strategy: all
+  - json_path: IPEC-COMMUNITY/EO-Data1.5M/qa-subtask_qa
+    sampling_strategy: all
+  - json_path: IPEC-COMMUNITY/EO-Data1.5M/qa-task_planning
+    sampling_strategy: all
+  - json_path: IPEC-COMMUNITY/EO-Data1.5M/interleave-free_chat
+    sampling_strategy: all
+  - json_path: IPEC-COMMUNITY/EO-Data1.5M/interleave-temporal
+    sampling_strategy: all
+  - json_path: IPEC-COMMUNITY/EO-Data1.5M/interleave-random_qa
+    sampling_strategy: all
+  - json_path: IPEC-COMMUNITY/EO-Data1.5M/interleave-video_caption
+    sampling_strategy: all
+    vision_base_path: IPEC-COMMUNITY/EO-Data1.5M-HF/interleave-video_caption
+
+
   # LLaVA-Instruct-665K
   - json_path: LLaVA-Instruct-150K/llava_v1_5_mix665k_processed.jsonl
     sampling_strategy: all
@@ -173,7 +211,7 @@ mm_datasets:
     vision_base_path: DATA/robovqa_raw/processed_data/train
 
 lerobot_datasets:
-  # openx
+  # Openx
   - repo_id: bridge_orig_1.0.0_lerobot
     root: LEROBOT_DATASET
     select_video_keys: [observation.images.image_0]
@@ -182,690 +220,805 @@ lerobot_datasets:
     select_video_keys: [observation.images.image]
   - repo_id: droid_1.0.0_lerobot
     root: LEROBOT_DATASET
-    select_video_keys: [observation.images.image]
+    select_video_keys: [observation.images.wrist_image_left, observation.images.exterior_image_1_left, observation.images.exterior_image_2_left]
+    weight: 0.1
 
   # agibot
   - repo_id: AgiBotWorld-Beta-Franka-LeRobot/task_354
     root: DATA
     train_subtask: true
+    delta_action: true
     select_video_keys: [observation.images.head, observation.images.hand_left, observation.images.hand_right]
     select_state_keys: [observation.states.head.position, observation.states.waist.position, observation.states.joint.position, observation.states.effector.position]
     select_action_keys: [actions.joint.position, actions.effector.position]
   - repo_id: AgiBotWorld-Beta-Franka-LeRobot/task_356
     root: DATA
     train_subtask: true
+    delta_action: true
     select_video_keys: [observation.images.head, observation.images.hand_left, observation.images.hand_right]
     select_state_keys: [observation.states.head.position, observation.states.waist.position, observation.states.joint.position, observation.states.effector.position]
     select_action_keys: [actions.joint.position, actions.effector.position]
   - repo_id: AgiBotWorld-Beta-Franka-LeRobot/task_359
     root: DATA
     train_subtask: true
+    delta_action: true
     select_video_keys: [observation.images.head, observation.images.hand_left, observation.images.hand_right]
     select_state_keys: [observation.states.head.position, observation.states.waist.position, observation.states.joint.position, observation.states.effector.position]
     select_action_keys: [actions.joint.position, actions.effector.position]
   - repo_id: AgiBotWorld-Beta-Franka-LeRobot/task_360
     root: DATA
     train_subtask: true
+    delta_action: true
     select_video_keys: [observation.images.head, observation.images.hand_left, observation.images.hand_right]
     select_state_keys: [observation.states.head.position, observation.states.waist.position, observation.states.joint.position, observation.states.effector.position]
     select_action_keys: [actions.joint.position, actions.effector.position]
   - repo_id: AgiBotWorld-Beta-Franka-LeRobot/task_361
     root: DATA
     train_subtask: true
+    delta_action: true
     select_video_keys: [observation.images.head, observation.images.hand_left, observation.images.hand_right]
     select_state_keys: [observation.states.head.position, observation.states.waist.position, observation.states.joint.position, observation.states.effector.position]
     select_action_keys: [actions.joint.position, actions.effector.position]
   - repo_id: AgiBotWorld-Beta-Franka-LeRobot/task_362
     root: DATA
     train_subtask: true
+    delta_action: true
     select_video_keys: [observation.images.head, observation.images.hand_left, observation.images.hand_right]
     select_state_keys: [observation.states.head.position, observation.states.waist.position, observation.states.joint.position, observation.states.effector.position]
     select_action_keys: [actions.joint.position, actions.effector.position]
   - repo_id: AgiBotWorld-Beta-Franka-LeRobot/task_365
     root: DATA
     train_subtask: true
+    delta_action: true
     select_video_keys: [observation.images.head, observation.images.hand_left, observation.images.hand_right]
     select_state_keys: [observation.states.head.position, observation.states.waist.position, observation.states.joint.position, observation.states.effector.position]
     select_action_keys: [actions.joint.position, actions.effector.position]
   - repo_id: AgiBotWorld-Beta-Franka-LeRobot/task_366
     root: DATA
     train_subtask: true
+    delta_action: true
     select_video_keys: [observation.images.head, observation.images.hand_left, observation.images.hand_right]
     select_state_keys: [observation.states.head.position, observation.states.waist.position, observation.states.joint.position, observation.states.effector.position]
     select_action_keys: [actions.joint.position, actions.effector.position]
   - repo_id: AgiBotWorld-Beta-Franka-LeRobot/task_372
     root: DATA
     train_subtask: true
+    delta_action: true
     select_video_keys: [observation.images.head, observation.images.hand_left, observation.images.hand_right]
     select_state_keys: [observation.states.head.position, observation.states.waist.position, observation.states.joint.position, observation.states.effector.position]
     select_action_keys: [actions.joint.position, actions.effector.position]
   - repo_id: AgiBotWorld-Beta-Franka-LeRobot/task_385
     root: DATA
     train_subtask: true
+    delta_action: true
     select_video_keys: [observation.images.head, observation.images.hand_left, observation.images.hand_right]
     select_state_keys: [observation.states.head.position, observation.states.waist.position, observation.states.joint.position, observation.states.effector.position]
     select_action_keys: [actions.joint.position, actions.effector.position]
   - repo_id: AgiBotWorld-Beta-Franka-LeRobot/task_388
     root: DATA
     train_subtask: true
+    delta_action: true
     select_video_keys: [observation.images.head, observation.images.hand_left, observation.images.hand_right]
     select_state_keys: [observation.states.head.position, observation.states.waist.position, observation.states.joint.position, observation.states.effector.position]
     select_action_keys: [actions.joint.position, actions.effector.position]
   - repo_id: AgiBotWorld-Beta-Franka-LeRobot/task_389
     root: DATA
     train_subtask: true
+    delta_action: true
     select_video_keys: [observation.images.head, observation.images.hand_left, observation.images.hand_right]
     select_state_keys: [observation.states.head.position, observation.states.waist.position, observation.states.joint.position, observation.states.effector.position]
     select_action_keys: [actions.joint.position, actions.effector.position]
   - repo_id: AgiBotWorld-Beta-Franka-LeRobot/task_390
     root: DATA
     train_subtask: true
+    delta_action: true
     select_video_keys: [observation.images.head, observation.images.hand_left, observation.images.hand_right]
     select_state_keys: [observation.states.head.position, observation.states.waist.position, observation.states.joint.position, observation.states.effector.position]
     select_action_keys: [actions.joint.position, actions.effector.position]
   - repo_id: AgiBotWorld-Beta-Franka-LeRobot/task_398
     root: DATA
     train_subtask: true
+    delta_action: true
     select_video_keys: [observation.images.head, observation.images.hand_left, observation.images.hand_right]
     select_state_keys: [observation.states.head.position, observation.states.waist.position, observation.states.joint.position, observation.states.effector.position]
     select_action_keys: [actions.joint.position, actions.effector.position]
   - repo_id: AgiBotWorld-Beta-Franka-LeRobot/task_422
     root: DATA
     train_subtask: true
+    delta_action: true
     select_video_keys: [observation.images.head, observation.images.hand_left, observation.images.hand_right]
     select_state_keys: [observation.states.head.position, observation.states.waist.position, observation.states.joint.position, observation.states.effector.position]
     select_action_keys: [actions.joint.position, actions.effector.position]
   - repo_id: AgiBotWorld-Beta-Franka-LeRobot/task_504
     root: DATA
     train_subtask: true
+    delta_action: true
     select_video_keys: [observation.images.head, observation.images.hand_left, observation.images.hand_right]
     select_state_keys: [observation.states.head.position, observation.states.waist.position, observation.states.joint.position, observation.states.effector.position]
     select_action_keys: [actions.joint.position, actions.effector.position]
   - repo_id: AgiBotWorld-Beta-Franka-LeRobot/task_505
     root: DATA
     train_subtask: true
+    delta_action: true
     select_video_keys: [observation.images.head, observation.images.hand_left, observation.images.hand_right]
     select_state_keys: [observation.states.head.position, observation.states.waist.position, observation.states.joint.position, observation.states.effector.position]
     select_action_keys: [actions.joint.position, actions.effector.position]
   - repo_id: AgiBotWorld-Beta-Franka-LeRobot/task_506
     root: DATA
     train_subtask: true
+    delta_action: true
     select_video_keys: [observation.images.head, observation.images.hand_left, observation.images.hand_right]
     select_state_keys: [observation.states.head.position, observation.states.waist.position, observation.states.joint.position, observation.states.effector.position]
     select_action_keys: [actions.joint.position, actions.effector.position]
   - repo_id: AgiBotWorld-Beta-Franka-LeRobot/task_532
     root: DATA
     train_subtask: true
+    delta_action: true
     select_video_keys: [observation.images.head, observation.images.hand_left, observation.images.hand_right]
     select_state_keys: [observation.states.head.position, observation.states.waist.position, observation.states.joint.position, observation.states.effector.position]
     select_action_keys: [actions.joint.position, actions.effector.position]
   - repo_id: AgiBotWorld-Beta-Franka-LeRobot/task_543
     root: DATA
     train_subtask: true
+    delta_action: true
     select_video_keys: [observation.images.head, observation.images.hand_left, observation.images.hand_right]
     select_state_keys: [observation.states.head.position, observation.states.waist.position, observation.states.joint.position, observation.states.effector.position]
     select_action_keys: [actions.joint.position, actions.effector.position]
   - repo_id: AgiBotWorld-Beta-Franka-LeRobot/task_566
     root: DATA
     train_subtask: true
+    delta_action: true
     select_video_keys: [observation.images.head, observation.images.hand_left, observation.images.hand_right]
     select_state_keys: [observation.states.head.position, observation.states.waist.position, observation.states.joint.position, observation.states.effector.position]
     select_action_keys: [actions.joint.position, actions.effector.position]
   - repo_id: AgiBotWorld-Beta-Franka-LeRobot/task_567
     root: DATA
     train_subtask: true
+    delta_action: true
     select_video_keys: [observation.images.head, observation.images.hand_left, observation.images.hand_right]
     select_state_keys: [observation.states.head.position, observation.states.waist.position, observation.states.joint.position, observation.states.effector.position]
     select_action_keys: [actions.joint.position, actions.effector.position]
   - repo_id: AgiBotWorld-Beta-Franka-LeRobot/task_568
     root: DATA
     train_subtask: true
+    delta_action: true
     select_video_keys: [observation.images.head, observation.images.hand_left, observation.images.hand_right]
     select_state_keys: [observation.states.head.position, observation.states.waist.position, observation.states.joint.position, observation.states.effector.position]
     select_action_keys: [actions.joint.position, actions.effector.position]
   - repo_id: AgiBotWorld-Beta-Franka-LeRobot/task_584
     root: DATA
     train_subtask: true
+    delta_action: true
     select_video_keys: [observation.images.head, observation.images.hand_left, observation.images.hand_right]
     select_state_keys: [observation.states.head.position, observation.states.waist.position, observation.states.joint.position, observation.states.effector.position]
     select_action_keys: [actions.joint.position, actions.effector.position]
   - repo_id: AgiBotWorld-Beta-Franka-LeRobot/task_597
     root: DATA
     train_subtask: true
+    delta_action: true
     select_video_keys: [observation.images.head, observation.images.hand_left, observation.images.hand_right]
     select_state_keys: [observation.states.head.position, observation.states.waist.position, observation.states.joint.position, observation.states.effector.position]
     select_action_keys: [actions.joint.position, actions.effector.position]
   - repo_id: AgiBotWorld-Beta-Franka-LeRobot/task_602
     root: DATA
     train_subtask: true
+    delta_action: true
     select_video_keys: [observation.images.head, observation.images.hand_left, observation.images.hand_right]
     select_state_keys: [observation.states.head.position, observation.states.waist.position, observation.states.joint.position, observation.states.effector.position]
     select_action_keys: [actions.joint.position, actions.effector.position]
   - repo_id: AgiBotWorld-Beta-Franka-LeRobot/task_609
     root: DATA
     train_subtask: true
+    delta_action: true
     select_video_keys: [observation.images.head, observation.images.hand_left, observation.images.hand_right]
     select_state_keys: [observation.states.head.position, observation.states.waist.position, observation.states.joint.position, observation.states.effector.position]
     select_action_keys: [actions.joint.position, actions.effector.position]
   - repo_id: AgiBotWorld-Beta-Franka-LeRobot/task_725
     root: DATA
     train_subtask: true
+    delta_action: true
     select_video_keys: [observation.images.head, observation.images.hand_left, observation.images.hand_right]
     select_state_keys: [observation.states.head.position, observation.states.waist.position, observation.states.joint.position, observation.states.effector.position]
     select_action_keys: [actions.joint.position, actions.effector.position]
   - repo_id: AgiBotWorld-Beta-Franka-LeRobot/task_741
     root: DATA
     train_subtask: true
+    delta_action: true
     select_video_keys: [observation.images.head, observation.images.hand_left, observation.images.hand_right]
     select_state_keys: [observation.states.head.position, observation.states.waist.position, observation.states.joint.position, observation.states.effector.position]
     select_action_keys: [actions.joint.position, actions.effector.position]
   - repo_id: AgiBotWorld-Beta-Franka-LeRobot/task_744
     root: DATA
     train_subtask: true
+    delta_action: true
     select_video_keys: [observation.images.head, observation.images.hand_left, observation.images.hand_right]
     select_state_keys: [observation.states.head.position, observation.states.waist.position, observation.states.joint.position, observation.states.effector.position]
     select_action_keys: [actions.joint.position, actions.effector.position]
   - repo_id: AgiBotWorld-Beta-Franka-LeRobot/task_748
     root: DATA
     train_subtask: true
+    delta_action: true
     select_video_keys: [observation.images.head, observation.images.hand_left, observation.images.hand_right]
     select_state_keys: [observation.states.head.position, observation.states.waist.position, observation.states.joint.position, observation.states.effector.position]
     select_action_keys: [actions.joint.position, actions.effector.position]
   - repo_id: AgiBotWorld-Beta-Franka-LeRobot/task_765
     root: DATA
     train_subtask: true
+    delta_action: true
     select_video_keys: [observation.images.head, observation.images.hand_left, observation.images.hand_right]
     select_state_keys: [observation.states.head.position, observation.states.waist.position, observation.states.joint.position, observation.states.effector.position]
     select_action_keys: [actions.joint.position, actions.effector.position]
   - repo_id: AgiBotWorld-Beta-Franka-LeRobot/task_779
     root: DATA
     train_subtask: true
+    delta_action: true
     select_video_keys: [observation.images.head, observation.images.hand_left, observation.images.hand_right]
     select_state_keys: [observation.states.head.position, observation.states.waist.position, observation.states.joint.position, observation.states.effector.position]
     select_action_keys: [actions.joint.position, actions.effector.position]
   - repo_id: AgiBotWorld-Beta-Franka-LeRobot/task_327
     root: DATA
     train_subtask: true
+    delta_action: true
     select_video_keys: [observation.images.head, observation.images.hand_left, observation.images.hand_right]
     select_state_keys: [observation.states.head.position, observation.states.waist.position, observation.states.joint.position, observation.states.effector.position]
     select_action_keys: [actions.joint.position, actions.effector.position]
   - repo_id: AgiBotWorld-Beta-Franka-LeRobot/task_351
     root: DATA
     train_subtask: true
+    delta_action: true
     select_video_keys: [observation.images.head, observation.images.hand_left, observation.images.hand_right]
     select_state_keys: [observation.states.head.position, observation.states.waist.position, observation.states.joint.position, observation.states.effector.position]
     select_action_keys: [actions.joint.position, actions.effector.position]
   - repo_id: AgiBotWorld-Beta-Franka-LeRobot/task_352
     root: DATA
     train_subtask: true
+    delta_action: true
     select_video_keys: [observation.images.head, observation.images.hand_left, observation.images.hand_right]
     select_state_keys: [observation.states.head.position, observation.states.waist.position, observation.states.joint.position, observation.states.effector.position]
     select_action_keys: [actions.joint.position, actions.effector.position]
   - repo_id: AgiBotWorld-Beta-Franka-LeRobot/task_357
     root: DATA
     train_subtask: true
+    delta_action: true
     select_video_keys: [observation.images.head, observation.images.hand_left, observation.images.hand_right]
     select_state_keys: [observation.states.head.position, observation.states.waist.position, observation.states.joint.position, observation.states.effector.position]
     select_action_keys: [actions.joint.position, actions.effector.position]
   - repo_id: AgiBotWorld-Beta-Franka-LeRobot/task_358
     root: DATA
     train_subtask: true
+    delta_action: true
     select_video_keys: [observation.images.head, observation.images.hand_left, observation.images.hand_right]
     select_state_keys: [observation.states.head.position, observation.states.waist.position, observation.states.joint.position, observation.states.effector.position]
     select_action_keys: [actions.joint.position, actions.effector.position]
   - repo_id: AgiBotWorld-Beta-Franka-LeRobot/task_363
     root: DATA
     train_subtask: true
+    delta_action: true
     select_video_keys: [observation.images.head, observation.images.hand_left, observation.images.hand_right]
     select_state_keys: [observation.states.head.position, observation.states.waist.position, observation.states.joint.position, observation.states.effector.position]
     select_action_keys: [actions.joint.position, actions.effector.position]
   - repo_id: AgiBotWorld-Beta-Franka-LeRobot/task_367
     root: DATA
     train_subtask: true
+    delta_action: true
     select_video_keys: [observation.images.head, observation.images.hand_left, observation.images.hand_right]
     select_state_keys: [observation.states.head.position, observation.states.waist.position, observation.states.joint.position, observation.states.effector.position]
     select_action_keys: [actions.joint.position, actions.effector.position]
   - repo_id: AgiBotWorld-Beta-Franka-LeRobot/task_368
     root: DATA
     train_subtask: true
+    delta_action: true
     select_video_keys: [observation.images.head, observation.images.hand_left, observation.images.hand_right]
     select_state_keys: [observation.states.head.position, observation.states.waist.position, observation.states.joint.position, observation.states.effector.position]
     select_action_keys: [actions.joint.position, actions.effector.position]
   - repo_id: AgiBotWorld-Beta-Franka-LeRobot/task_369
     root: DATA
     train_subtask: true
+    delta_action: true
     select_video_keys: [observation.images.head, observation.images.hand_left, observation.images.hand_right]
     select_state_keys: [observation.states.head.position, observation.states.waist.position, observation.states.joint.position, observation.states.effector.position]
     select_action_keys: [actions.joint.position, actions.effector.position]
   - repo_id: AgiBotWorld-Beta-Franka-LeRobot/task_373
     root: DATA
     train_subtask: true
+    delta_action: true
     select_video_keys: [observation.images.head, observation.images.hand_left, observation.images.hand_right]
     select_state_keys: [observation.states.head.position, observation.states.waist.position, observation.states.joint.position, observation.states.effector.position]
     select_action_keys: [actions.joint.position, actions.effector.position]
   - repo_id: AgiBotWorld-Beta-Franka-LeRobot/task_374
     root: DATA
     train_subtask: true
+    delta_action: true
     select_video_keys: [observation.images.head, observation.images.hand_left, observation.images.hand_right]
     select_state_keys: [observation.states.head.position, observation.states.waist.position, observation.states.joint.position, observation.states.effector.position]
     select_action_keys: [actions.joint.position, actions.effector.position]
   - repo_id: AgiBotWorld-Beta-Franka-LeRobot/task_375
     root: DATA
     train_subtask: true
+    delta_action: true
     select_video_keys: [observation.images.head, observation.images.hand_left, observation.images.hand_right]
     select_state_keys: [observation.states.head.position, observation.states.waist.position, observation.states.joint.position, observation.states.effector.position]
     select_action_keys: [actions.joint.position, actions.effector.position]
   - repo_id: AgiBotWorld-Beta-Franka-LeRobot/task_376
     root: DATA
     train_subtask: true
+    delta_action: true
     select_video_keys: [observation.images.head, observation.images.hand_left, observation.images.hand_right]
     select_state_keys: [observation.states.head.position, observation.states.waist.position, observation.states.joint.position, observation.states.effector.position]
     select_action_keys: [actions.joint.position, actions.effector.position]
   - repo_id: AgiBotWorld-Beta-Franka-LeRobot/task_377
     root: DATA
     train_subtask: true
+    delta_action: true
     select_video_keys: [observation.images.head, observation.images.hand_left, observation.images.hand_right]
     select_state_keys: [observation.states.head.position, observation.states.waist.position, observation.states.joint.position, observation.states.effector.position]
     select_action_keys: [actions.joint.position, actions.effector.position]
   - repo_id: AgiBotWorld-Beta-Franka-LeRobot/task_378
     root: DATA
     train_subtask: true
+    delta_action: true
     select_video_keys: [observation.images.head, observation.images.hand_left, observation.images.hand_right]
     select_state_keys: [observation.states.head.position, observation.states.waist.position, observation.states.joint.position, observation.states.effector.position]
     select_action_keys: [actions.joint.position, actions.effector.position]
   - repo_id: AgiBotWorld-Beta-Franka-LeRobot/task_380
     root: DATA
     train_subtask: true
+    delta_action: true
     select_video_keys: [observation.images.head, observation.images.hand_left, observation.images.hand_right]
     select_state_keys: [observation.states.head.position, observation.states.waist.position, observation.states.joint.position, observation.states.effector.position]
     select_action_keys: [actions.joint.position, actions.effector.position]
   - repo_id: AgiBotWorld-Beta-Franka-LeRobot/task_384
     root: DATA
     train_subtask: true
+    delta_action: true
     select_video_keys: [observation.images.head, observation.images.hand_left, observation.images.hand_right]
     select_state_keys: [observation.states.head.position, observation.states.waist.position, observation.states.joint.position, observation.states.effector.position]
     select_action_keys: [actions.joint.position, actions.effector.position]
   - repo_id: AgiBotWorld-Beta-Franka-LeRobot/task_392
     root: DATA
     train_subtask: true
+    delta_action: true
     select_video_keys: [observation.images.head, observation.images.hand_left, observation.images.hand_right]
     select_state_keys: [observation.states.head.position, observation.states.waist.position, observation.states.joint.position, observation.states.effector.position]
     select_action_keys: [actions.joint.position, actions.effector.position]
   - repo_id: AgiBotWorld-Beta-Franka-LeRobot/task_410
     root: DATA
     train_subtask: true
+    delta_action: true
     select_video_keys: [observation.images.head, observation.images.hand_left, observation.images.hand_right]
     select_state_keys: [observation.states.head.position, observation.states.waist.position, observation.states.joint.position, observation.states.effector.position]
     select_action_keys: [actions.joint.position, actions.effector.position]
   - repo_id: AgiBotWorld-Beta-Franka-LeRobot/task_414
     root: DATA
     train_subtask: true
+    delta_action: true
     select_video_keys: [observation.images.head, observation.images.hand_left, observation.images.hand_right]
     select_state_keys: [observation.states.head.position, observation.states.waist.position, observation.states.joint.position, observation.states.effector.position]
     select_action_keys: [actions.joint.position, actions.effector.position]
   - repo_id: AgiBotWorld-Beta-Franka-LeRobot/task_421
     root: DATA
     train_subtask: true
+    delta_action: true
     select_video_keys: [observation.images.head, observation.images.hand_left, observation.images.hand_right]
     select_state_keys: [observation.states.head.position, observation.states.waist.position, observation.states.joint.position, observation.states.effector.position]
     select_action_keys: [actions.joint.position, actions.effector.position]
   - repo_id: AgiBotWorld-Beta-Franka-LeRobot/task_424
     root: DATA
     train_subtask: true
+    delta_action: true
     select_video_keys: [observation.images.head, observation.images.hand_left, observation.images.hand_right]
     select_state_keys: [observation.states.head.position, observation.states.waist.position, observation.states.joint.position, observation.states.effector.position]
     select_action_keys: [actions.joint.position, actions.effector.position]
   - repo_id: AgiBotWorld-Beta-Franka-LeRobot/task_425
     root: DATA
     train_subtask: true
+    delta_action: true
     select_video_keys: [observation.images.head, observation.images.hand_left, observation.images.hand_right]
     select_state_keys: [observation.states.head.position, observation.states.waist.position, observation.states.joint.position, observation.states.effector.position]
     select_action_keys: [actions.joint.position, actions.effector.position]
   - repo_id: AgiBotWorld-Beta-Franka-LeRobot/task_428
     root: DATA
     train_subtask: true
+    delta_action: true
     select_video_keys: [observation.images.head, observation.images.hand_left, observation.images.hand_right]
     select_state_keys: [observation.states.head.position, observation.states.waist.position, observation.states.joint.position, observation.states.effector.position]
     select_action_keys: [actions.joint.position, actions.effector.position]
   - repo_id: AgiBotWorld-Beta-Franka-LeRobot/task_429
     root: DATA
     train_subtask: true
+    delta_action: true
     select_video_keys: [observation.images.head, observation.images.hand_left, observation.images.hand_right]
     select_state_keys: [observation.states.head.position, observation.states.waist.position, observation.states.joint.position, observation.states.effector.position]
     select_action_keys: [actions.joint.position, actions.effector.position]
   - repo_id: AgiBotWorld-Beta-Franka-LeRobot/task_431
     root: DATA
     train_subtask: true
+    delta_action: true
     select_video_keys: [observation.images.head, observation.images.hand_left, observation.images.hand_right]
     select_state_keys: [observation.states.head.position, observation.states.waist.position, observation.states.joint.position, observation.states.effector.position]
     select_action_keys: [actions.joint.position, actions.effector.position]
   - repo_id: AgiBotWorld-Beta-Franka-LeRobot/task_433
     root: DATA
     train_subtask: true
+    delta_action: true
     select_video_keys: [observation.images.head, observation.images.hand_left, observation.images.hand_right]
     select_state_keys: [observation.states.head.position, observation.states.waist.position, observation.states.joint.position, observation.states.effector.position]
     select_action_keys: [actions.joint.position, actions.effector.position]
   - repo_id: AgiBotWorld-Beta-Franka-LeRobot/task_434
     root: DATA
     train_subtask: true
+    delta_action: true
     select_video_keys: [observation.images.head, observation.images.hand_left, observation.images.hand_right]
     select_state_keys: [observation.states.head.position, observation.states.waist.position, observation.states.joint.position, observation.states.effector.position]
     select_action_keys: [actions.joint.position, actions.effector.position]
   - repo_id: AgiBotWorld-Beta-Franka-LeRobot/task_438
     root: DATA
     train_subtask: true
+    delta_action: true
     select_video_keys: [observation.images.head, observation.images.hand_left, observation.images.hand_right]
     select_state_keys: [observation.states.head.position, observation.states.waist.position, observation.states.joint.position, observation.states.effector.position]
     select_action_keys: [actions.joint.position, actions.effector.position]
   - repo_id: AgiBotWorld-Beta-Franka-LeRobot/task_440
     root: DATA
     train_subtask: true
+    delta_action: true
     select_video_keys: [observation.images.head, observation.images.hand_left, observation.images.hand_right]
     select_state_keys: [observation.states.head.position, observation.states.waist.position, observation.states.joint.position, observation.states.effector.position]
     select_action_keys: [actions.joint.position, actions.effector.position]
   - repo_id: AgiBotWorld-Beta-Franka-LeRobot/task_444
     root: DATA
     train_subtask: true
+    delta_action: true
     select_video_keys: [observation.images.head, observation.images.hand_left, observation.images.hand_right]
     select_state_keys: [observation.states.head.position, observation.states.waist.position, observation.states.joint.position, observation.states.effector.position]
     select_action_keys: [actions.joint.position, actions.effector.position]
   - repo_id: AgiBotWorld-Beta-Franka-LeRobot/task_445
     root: DATA
     train_subtask: true
+    delta_action: true
     select_video_keys: [observation.images.head, observation.images.hand_left, observation.images.hand_right]
     select_state_keys: [observation.states.head.position, observation.states.waist.position, observation.states.joint.position, observation.states.effector.position]
     select_action_keys: [actions.joint.position, actions.effector.position]
   - repo_id: AgiBotWorld-Beta-Franka-LeRobot/task_446
     root: DATA
     train_subtask: true
+    delta_action: true
     select_video_keys: [observation.images.head, observation.images.hand_left, observation.images.hand_right]
     select_state_keys: [observation.states.head.position, observation.states.waist.position, observation.states.joint.position, observation.states.effector.position]
     select_action_keys: [actions.joint.position, actions.effector.position]
   - repo_id: AgiBotWorld-Beta-Franka-LeRobot/task_451
     root: DATA
     train_subtask: true
+    delta_action: true
     select_video_keys: [observation.images.head, observation.images.hand_left, observation.images.hand_right]
     select_state_keys: [observation.states.head.position, observation.states.waist.position, observation.states.joint.position, observation.states.effector.position]
     select_action_keys: [actions.joint.position, actions.effector.position]
   - repo_id: AgiBotWorld-Beta-Franka-LeRobot/task_452
     root: DATA
     train_subtask: true
+    delta_action: true
     select_video_keys: [observation.images.head, observation.images.hand_left, observation.images.hand_right]
     select_state_keys: [observation.states.head.position, observation.states.waist.position, observation.states.joint.position, observation.states.effector.position]
     select_action_keys: [actions.joint.position, actions.effector.position]
   - repo_id: AgiBotWorld-Beta-Franka-LeRobot/task_453
     root: DATA
     train_subtask: true
+    delta_action: true
     select_video_keys: [observation.images.head, observation.images.hand_left, observation.images.hand_right]
     select_state_keys: [observation.states.head.position, observation.states.waist.position, observation.states.joint.position, observation.states.effector.position]
     select_action_keys: [actions.joint.position, actions.effector.position]
   - repo_id: AgiBotWorld-Beta-Franka-LeRobot/task_454
     root: DATA
     train_subtask: true
+    delta_action: true
     select_video_keys: [observation.images.head, observation.images.hand_left, observation.images.hand_right]
     select_state_keys: [observation.states.head.position, observation.states.waist.position, observation.states.joint.position, observation.states.effector.position]
     select_action_keys: [actions.joint.position, actions.effector.position]
   - repo_id: AgiBotWorld-Beta-Franka-LeRobot/task_455
     root: DATA
     train_subtask: true
+    delta_action: true
     select_video_keys: [observation.images.head, observation.images.hand_left, observation.images.hand_right]
     select_state_keys: [observation.states.head.position, observation.states.waist.position, observation.states.joint.position, observation.states.effector.position]
     select_action_keys: [actions.joint.position, actions.effector.position]
   - repo_id: AgiBotWorld-Beta-Franka-LeRobot/task_460
     root: DATA
     train_subtask: true
+    delta_action: true
     select_video_keys: [observation.images.head, observation.images.hand_left, observation.images.hand_right]
     select_state_keys: [observation.states.head.position, observation.states.waist.position, observation.states.joint.position, observation.states.effector.position]
     select_action_keys: [actions.joint.position, actions.effector.position]
   - repo_id: AgiBotWorld-Beta-Franka-LeRobot/task_462
     root: DATA
     train_subtask: true
+    delta_action: true
     select_video_keys: [observation.images.head, observation.images.hand_left, observation.images.hand_right]
     select_state_keys: [observation.states.head.position, observation.states.waist.position, observation.states.joint.position, observation.states.effector.position]
     select_action_keys: [actions.joint.position, actions.effector.position]
   - repo_id: AgiBotWorld-Beta-Franka-LeRobot/task_463
     root: DATA
     train_subtask: true
+    delta_action: true
     select_video_keys: [observation.images.head, observation.images.hand_left, observation.images.hand_right]
     select_state_keys: [observation.states.head.position, observation.states.waist.position, observation.states.joint.position, observation.states.effector.position]
     select_action_keys: [actions.joint.position, actions.effector.position]
   - repo_id: AgiBotWorld-Beta-Franka-LeRobot/task_464
     root: DATA
     train_subtask: true
+    delta_action: true
     select_video_keys: [observation.images.head, observation.images.hand_left, observation.images.hand_right]
     select_state_keys: [observation.states.head.position, observation.states.waist.position, observation.states.joint.position, observation.states.effector.position]
     select_action_keys: [actions.joint.position, actions.effector.position]
   - repo_id: AgiBotWorld-Beta-Franka-LeRobot/task_465
     root: DATA
     train_subtask: true
+    delta_action: true
     select_video_keys: [observation.images.head, observation.images.hand_left, observation.images.hand_right]
     select_state_keys: [observation.states.head.position, observation.states.waist.position, observation.states.joint.position, observation.states.effector.position]
     select_action_keys: [actions.joint.position, actions.effector.position]
   - repo_id: AgiBotWorld-Beta-Franka-LeRobot/task_466
     root: DATA
     train_subtask: true
+    delta_action: true
     select_video_keys: [observation.images.head, observation.images.hand_left, observation.images.hand_right]
     select_state_keys: [observation.states.head.position, observation.states.waist.position, observation.states.joint.position, observation.states.effector.position]
     select_action_keys: [actions.joint.position, actions.effector.position]
   - repo_id: AgiBotWorld-Beta-Franka-LeRobot/task_468
     root: DATA
     train_subtask: true
+    delta_action: true
     select_video_keys: [observation.images.head, observation.images.hand_left, observation.images.hand_right]
     select_state_keys: [observation.states.head.position, observation.states.waist.position, observation.states.joint.position, observation.states.effector.position]
     select_action_keys: [actions.joint.position, actions.effector.position]
   - repo_id: AgiBotWorld-Beta-Franka-LeRobot/task_470
     root: DATA
     train_subtask: true
+    delta_action: true
     select_video_keys: [observation.images.head, observation.images.hand_left, observation.images.hand_right]
     select_state_keys: [observation.states.head.position, observation.states.waist.position, observation.states.joint.position, observation.states.effector.position]
     select_action_keys: [actions.joint.position, actions.effector.position]
   - repo_id: AgiBotWorld-Beta-Franka-LeRobot/task_471
     root: DATA
     train_subtask: true
+    delta_action: true
     select_video_keys: [observation.images.head, observation.images.hand_left, observation.images.hand_right]
     select_state_keys: [observation.states.head.position, observation.states.waist.position, observation.states.joint.position, observation.states.effector.position]
     select_action_keys: [actions.joint.position, actions.effector.position]
   - repo_id: AgiBotWorld-Beta-Franka-LeRobot/task_474
     root: DATA
     train_subtask: true
+    delta_action: true
     select_video_keys: [observation.images.head, observation.images.hand_left, observation.images.hand_right]
     select_state_keys: [observation.states.head.position, observation.states.waist.position, observation.states.joint.position, observation.states.effector.position]
     select_action_keys: [actions.joint.position, actions.effector.position]
   - repo_id: AgiBotWorld-Beta-Franka-LeRobot/task_477
     root: DATA
     train_subtask: true
+    delta_action: true
     select_video_keys: [observation.images.head, observation.images.hand_left, observation.images.hand_right]
     select_state_keys: [observation.states.head.position, observation.states.waist.position, observation.states.joint.position, observation.states.effector.position]
     select_action_keys: [actions.joint.position, actions.effector.position]
   - repo_id: AgiBotWorld-Beta-Franka-LeRobot/task_478
     root: DATA
     train_subtask: true
+    delta_action: true
     select_video_keys: [observation.images.head, observation.images.hand_left, observation.images.hand_right]
     select_state_keys: [observation.states.head.position, observation.states.waist.position, observation.states.joint.position, observation.states.effector.position]
     select_action_keys: [actions.joint.position, actions.effector.position]
   - repo_id: AgiBotWorld-Beta-Franka-LeRobot/task_480
     root: DATA
     train_subtask: true
+    delta_action: true
     select_video_keys: [observation.images.head, observation.images.hand_left, observation.images.hand_right]
     select_state_keys: [observation.states.head.position, observation.states.waist.position, observation.states.joint.position, observation.states.effector.position]
     select_action_keys: [actions.joint.position, actions.effector.position]
   - repo_id: AgiBotWorld-Beta-Franka-LeRobot/task_483
     root: DATA
     train_subtask: true
+    delta_action: true
     select_video_keys: [observation.images.head, observation.images.hand_left, observation.images.hand_right]
     select_state_keys: [observation.states.head.position, observation.states.waist.position, observation.states.joint.position, observation.states.effector.position]
     select_action_keys: [actions.joint.position, actions.effector.position]
   - repo_id: AgiBotWorld-Beta-Franka-LeRobot/task_485
     root: DATA
     train_subtask: true
+    delta_action: true
     select_video_keys: [observation.images.head, observation.images.hand_left, observation.images.hand_right]
     select_state_keys: [observation.states.head.position, observation.states.waist.position, observation.states.joint.position, observation.states.effector.position]
     select_action_keys: [actions.joint.position, actions.effector.position]
   - repo_id: AgiBotWorld-Beta-Franka-LeRobot/task_486
     root: DATA
     train_subtask: true
+    delta_action: true
     select_video_keys: [observation.images.head, observation.images.hand_left, observation.images.hand_right]
     select_state_keys: [observation.states.head.position, observation.states.waist.position, observation.states.joint.position, observation.states.effector.position]
     select_action_keys: [actions.joint.position, actions.effector.position]
   - repo_id: AgiBotWorld-Beta-Franka-LeRobot/task_487
     root: DATA
     train_subtask: true
+    delta_action: true
     select_video_keys: [observation.images.head, observation.images.hand_left, observation.images.hand_right]
     select_state_keys: [observation.states.head.position, observation.states.waist.position, observation.states.joint.position, observation.states.effector.position]
     select_action_keys: [actions.joint.position, actions.effector.position]
   - repo_id: AgiBotWorld-Beta-Franka-LeRobot/task_491
     root: DATA
     train_subtask: true
+    delta_action: true
     select_video_keys: [observation.images.head, observation.images.hand_left, observation.images.hand_right]
     select_state_keys: [observation.states.head.position, observation.states.waist.position, observation.states.joint.position, observation.states.effector.position]
     select_action_keys: [actions.joint.position, actions.effector.position]
   - repo_id: AgiBotWorld-Beta-Franka-LeRobot/task_492
     root: DATA
     train_subtask: true
+    delta_action: true
     select_video_keys: [observation.images.head, observation.images.hand_left, observation.images.hand_right]
     select_state_keys: [observation.states.head.position, observation.states.waist.position, observation.states.joint.position, observation.states.effector.position]
     select_action_keys: [actions.joint.position, actions.effector.position]
   - repo_id: AgiBotWorld-Beta-Franka-LeRobot/task_494
     root: DATA
     train_subtask: true
+    delta_action: true
     select_video_keys: [observation.images.head, observation.images.hand_left, observation.images.hand_right]
     select_state_keys: [observation.states.head.position, observation.states.waist.position, observation.states.joint.position, observation.states.effector.position]
     select_action_keys: [actions.joint.position, actions.effector.position]
   - repo_id: AgiBotWorld-Beta-Franka-LeRobot/task_497
     root: DATA
     train_subtask: true
+    delta_action: true
     select_video_keys: [observation.images.head, observation.images.hand_left, observation.images.hand_right]
     select_state_keys: [observation.states.head.position, observation.states.waist.position, observation.states.joint.position, observation.states.effector.position]
     select_action_keys: [actions.joint.position, actions.effector.position]
   - repo_id: AgiBotWorld-Beta-Franka-LeRobot/task_498
     root: DATA
     train_subtask: true
+    delta_action: true
     select_video_keys: [observation.images.head, observation.images.hand_left, observation.images.hand_right]
     select_state_keys: [observation.states.head.position, observation.states.waist.position, observation.states.joint.position, observation.states.effector.position]
     select_action_keys: [actions.joint.position, actions.effector.position]
   - repo_id: AgiBotWorld-Beta-Franka-LeRobot/task_501
     root: DATA
     train_subtask: true
+    delta_action: true
     select_video_keys: [observation.images.head, observation.images.hand_left, observation.images.hand_right]
     select_state_keys: [observation.states.head.position, observation.states.waist.position, observation.states.joint.position, observation.states.effector.position]
     select_action_keys: [actions.joint.position, actions.effector.position]
   - repo_id: AgiBotWorld-Beta-Franka-LeRobot/task_503
     root: DATA
     train_subtask: true
+    delta_action: true
     select_video_keys: [observation.images.head, observation.images.hand_left, observation.images.hand_right]
     select_state_keys: [observation.states.head.position, observation.states.waist.position, observation.states.joint.position, observation.states.effector.position]
     select_action_keys: [actions.joint.position, actions.effector.position]
   - repo_id: AgiBotWorld-Beta-Franka-LeRobot/task_507
     root: DATA
     train_subtask: true
+    delta_action: true
     select_video_keys: [observation.images.head, observation.images.hand_left, observation.images.hand_right]
     select_state_keys: [observation.states.head.position, observation.states.waist.position, observation.states.joint.position, observation.states.effector.position]
     select_action_keys: [actions.joint.position, actions.effector.position]
   - repo_id: AgiBotWorld-Beta-Franka-LeRobot/task_508
     root: DATA
     train_subtask: true
+    delta_action: true
     select_video_keys: [observation.images.head, observation.images.hand_left, observation.images.hand_right]
     select_state_keys: [observation.states.head.position, observation.states.waist.position, observation.states.joint.position, observation.states.effector.position]
     select_action_keys: [actions.joint.position, actions.effector.position]
   - repo_id: AgiBotWorld-Beta-Franka-LeRobot/task_509
     root: DATA
     train_subtask: true
+    delta_action: true
     select_video_keys: [observation.images.head, observation.images.hand_left, observation.images.hand_right]
     select_state_keys: [observation.states.head.position, observation.states.waist.position, observation.states.joint.position, observation.states.effector.position]
     select_action_keys: [actions.joint.position, actions.effector.position]
   - repo_id: AgiBotWorld-Beta-Franka-LeRobot/task_510
     root: DATA
     train_subtask: true
+    delta_action: true
     select_video_keys: [observation.images.head, observation.images.hand_left, observation.images.hand_right]
     select_state_keys: [observation.states.head.position, observation.states.waist.position, observation.states.joint.position, observation.states.effector.position]
     select_action_keys: [actions.joint.position, actions.effector.position]
   - repo_id: AgiBotWorld-Beta-Franka-LeRobot/task_511
     root: DATA
     train_subtask: true
+    delta_action: true
     select_video_keys: [observation.images.head, observation.images.hand_left, observation.images.hand_right]
     select_state_keys: [observation.states.head.position, observation.states.waist.position, observation.states.joint.position, observation.states.effector.position]
     select_action_keys: [actions.joint.position, actions.effector.position]
   - repo_id: AgiBotWorld-Beta-Franka-LeRobot/task_512
     root: DATA
     train_subtask: true
+    delta_action: true
     select_video_keys: [observation.images.head, observation.images.hand_left, observation.images.hand_right]
     select_state_keys: [observation.states.head.position, observation.states.waist.position, observation.states.joint.position, observation.states.effector.position]
     select_action_keys: [actions.joint.position, actions.effector.position]
   - repo_id: AgiBotWorld-Beta-Franka-LeRobot/task_515
     root: DATA
     train_subtask: true
+    delta_action: true
     select_video_keys: [observation.images.head, observation.images.hand_left, observation.images.hand_right]
     select_state_keys: [observation.states.head.position, observation.states.waist.position, observation.states.joint.position, observation.states.effector.position]
     select_action_keys: [actions.joint.position, actions.effector.position]
   - repo_id: AgiBotWorld-Beta-Franka-LeRobot/task_520
     root: DATA
     train_subtask: true
+    delta_action: true
     select_video_keys: [observation.images.head, observation.images.hand_left, observation.images.hand_right]
     select_state_keys: [observation.states.head.position, observation.states.waist.position, observation.states.joint.position, observation.states.effector.position]
     select_action_keys: [actions.joint.position, actions.effector.position]
   - repo_id: AgiBotWorld-Beta-Franka-LeRobot/task_521
     root: DATA
     train_subtask: true
+    delta_action: true
     select_video_keys: [observation.images.head, observation.images.hand_left, observation.images.hand_right]
     select_state_keys: [observation.states.head.position, observation.states.waist.position, observation.states.joint.position, observation.states.effector.position]
     select_action_keys: [actions.joint.position, actions.effector.position]
   - repo_id: AgiBotWorld-Beta-Franka-LeRobot/task_522
     root: DATA
     train_subtask: true
+    delta_action: true
     select_video_keys: [observation.images.head, observation.images.hand_left, observation.images.hand_right]
     select_state_keys: [observation.states.head.position, observation.states.waist.position, observation.states.joint.position, observation.states.effector.position]
     select_action_keys: [actions.joint.position, actions.effector.position]
   - repo_id: AgiBotWorld-Beta-Franka-LeRobot/task_524
     root: DATA
     train_subtask: true
+    delta_action: true
     select_video_keys: [observation.images.head, observation.images.hand_left, observation.images.hand_right]
     select_state_keys: [observation.states.head.position, observation.states.waist.position, observation.states.joint.position, observation.states.effector.position]
     select_action_keys: [actions.joint.position, actions.effector.position]
   - repo_id: AgiBotWorld-Beta-Franka-LeRobot/task_525
     root: DATA
     train_subtask: true
+    delta_action: true
     select_video_keys: [observation.images.head, observation.images.hand_left, observation.images.hand_right]
     select_state_keys: [observation.states.head.position, observation.states.waist.position, observation.states.joint.position, observation.states.effector.position]
     select_action_keys: [actions.joint.position, actions.effector.position]
   - repo_id: AgiBotWorld-Beta-Franka-LeRobot/task_527
     root: DATA
     train_subtask: true
+    delta_action: true
     select_video_keys: [observation.images.head, observation.images.hand_left, observation.images.hand_right]
     select_state_keys: [observation.states.head.position, observation.states.waist.position, observation.states.joint.position, observation.states.effector.position]
     select_action_keys: [actions.joint.position, actions.effector.position]
   - repo_id: AgiBotWorld-Beta-Franka-LeRobot/task_528
     root: DATA
     train_subtask: true
+    delta_action: true
     select_video_keys: [observation.images.head, observation.images.hand_left, observation.images.hand_right]
     select_state_keys: [observation.states.head.position, observation.states.waist.position, observation.states.joint.position, observation.states.effector.position]
     select_action_keys: [actions.joint.position, actions.effector.position]
   - repo_id: AgiBotWorld-Beta-Franka-LeRobot/task_529
     root: DATA
     train_subtask: true
+    delta_action: true
     select_video_keys: [observation.images.head, observation.images.hand_left, observation.images.hand_right]
     select_state_keys: [observation.states.head.position, observation.states.waist.position, observation.states.joint.position, observation.states.effector.position]
     select_action_keys: [actions.joint.position, actions.effector.position]
   - repo_id: AgiBotWorld-Beta-Franka-LeRobot/task_533
     root: DATA
     train_subtask: true
+    delta_action: true
     select_video_keys: [observation.images.head, observation.images.hand_left, observation.images.hand_right]
     select_state_keys: [observation.states.head.position, observation.states.waist.position, observation.states.joint.position, observation.states.effector.position]
     select_action_keys: [actions.joint.position, actions.effector.position]
   - repo_id: AgiBotWorld-Beta-Franka-LeRobot/task_534
     root: DATA
     train_subtask: true
+    delta_action: true
     select_video_keys: [observation.images.head, observation.images.hand_left, observation.images.hand_right]
     select_state_keys: [observation.states.head.position, observation.states.waist.position, observation.states.joint.position, observation.states.effector.position]
     select_action_keys: [actions.joint.position, actions.effector.position]
   - repo_id: AgiBotWorld-Beta-Franka-LeRobot/task_535
     root: DATA
     train_subtask: true
+    delta_action: true
     select_video_keys: [observation.images.head, observation.images.hand_left, observation.images.hand_right]
     select_state_keys: [observation.states.head.position, observation.states.waist.position, observation.states.joint.position, observation.states.effector.position]
     select_action_keys: [actions.joint.position, actions.effector.position]
   - repo_id: AgiBotWorld-Beta-Franka-LeRobot/task_537
     root: DATA
     train_subtask: true
+    delta_action: true
     select_video_keys: [observation.images.head, observation.images.hand_left, observation.images.hand_right]
     select_state_keys: [observation.states.head.position, observation.states.waist.position, observation.states.joint.position, observation.states.effector.position]
     select_action_keys: [actions.joint.position, actions.effector.position]

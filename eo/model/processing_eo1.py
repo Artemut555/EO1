@@ -110,7 +110,7 @@ class EO1VisionProcessor(ProcessorMixin):
 
         # robot policy
         self.action_token_id = tokenizer.convert_tokens_to_ids(DEFAULT_ACTION_TOKEN) or 151666
-        self.action_pass_id = tokenizer.convert_tokens_to_ids(PASS_ACTION_TOKEN) or 151667
+        self.action_pass_id = tokenizer.convert_tokens_to_ids(PASS_ACTION_TOKEN) or 151672
         self.robot_config = robot_config or {}
         self.set_normalization(self.robot_config)
 

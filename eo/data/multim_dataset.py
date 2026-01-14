@@ -49,7 +49,7 @@ class MultimodaDataset(Dataset):
     def __init__(
         self,
         data_configs: list[MMDatasetConfig],
-        max_seq_length: int = 16384,
+        max_seq_length: int = 8192,
         max_action_dim: int = 32,
         chunk_size: int = 50,
     ):
@@ -83,17 +83,17 @@ class MultimodaDataset(Dataset):
                 cur_data_dict = []
 
                 for idx in range(len_hf_ds):
-                    cur_data_dict.append({
-                        "hf_idx": len(list_hf_datasets),
-                        "data_idx": idx,
-                        "seq_length": hf_dataset_lens[idx]
-                    })
+                    cur_data_dict.append(
+                        {
+                            "hf_idx": len(list_hf_datasets),
+                            "data_idx": idx,
+                            "seq_length": hf_dataset_lens[idx],
+                        }
+                    )
                 list_hf_datasets.append(hf_dataset)
 
-            # NOTE: filter out lines above MAX_SEQ_LENGTH
-            cur_data_dict = [
-                line for line in cur_data_dict if line.get("seq_length", 0) <= max_seq_length
-            ]
+            # NOTE: filter out lines above MAX_SEQ_LENGTH, set default seq_length to 196
+            cur_data_dict = [line for line in cur_data_dict if line.get("seq_length", 196) <= max_seq_length]
 
             if ":" in sampling_strategy:
                 sampling_strategy, sampling_number = sampling_strategy.split(":")
@@ -124,8 +124,10 @@ class MultimodaDataset(Dataset):
                 seq_len = line.get("seq_length", 0)
                 seq_lengths.append(seq_len)
                 if seq_len == 0:
-                    print(f"[Warning] {seq_len=}, {json_path=}, {line=}, \
-                    please group length for data packing usage")
+                    print(
+                        f"[Warning] {seq_len=}, {json_path=}, {line=}, \
+                    please group length for data packing usage"
+                    )
 
         self.json_data = list_data_dict
         self.hf_datas = list_hf_datasets
@@ -146,9 +148,7 @@ class MultimodaDataset(Dataset):
             key = "conversation"
 
         transformed_source = copy.deepcopy(sources)
-        transformed_source["conversations"] = llava_to_openai(
-            transformed_source[key], "video" in sources
-        )
+        transformed_source["conversations"] = llava_to_openai(transformed_source[key], "video" in sources)
         return transformed_source
 
     @property

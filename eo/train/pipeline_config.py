@@ -65,6 +65,7 @@ class TrainPipelineConfig(TrainingArguments):
     freeze_llm: bool = field(default=False)
     freeze_merger: bool = field(default=False)
     freeze_lm_head: bool = field(default=False)
+    freeze_flow: bool = field(default=False)
     attn_implementation: str = field(default="sdpa")  # sdpa, flash_attention_2, flash_attention_3
 
     lora_enable: bool = False
@@ -92,7 +93,12 @@ class TrainPipelineConfig(TrainingArguments):
         """check validity"""
         if self.train_lerobot_only and self.train_mm_only:
             self.train_mm_only = False
+            self.freeze_lm_head = True
             warnings.warn("`train_mm_only` is set to False when `train_lerobot_only` is True.", stacklevel=2)
+
+        if self.train_mm_only:
+            self.freeze_flow = True
+            warnings.warn("`freeze_flow` is set to True when `train_mm_only` is True.", stacklevel=2)
 
         if self.lora_enable and not self.freeze_llm:
             self.freeze_llm = True

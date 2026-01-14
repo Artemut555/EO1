@@ -34,6 +34,20 @@ def configure_llm(vlm, training_args):
     set_requires_grad(llm_params, not training_args.freeze_llm)
 
 
+def configure_flow(model, training_args):
+    """Configure the flow."""
+    modules_to_freeze = [
+        model.state_proj,
+        model.action_in_proj,
+        model.action_out_proj,
+        model.action_time_mlp_in,
+        model.action_time_mlp_out,
+    ]
+
+    for module in modules_to_freeze:
+        set_requires_grad(module.parameters(), not training_args.freeze_flow)
+
+
 def configure_processor(processor, dataset, training_args):
     """Configure the processor."""
     if training_args.chat_template:
@@ -76,9 +90,14 @@ def smart_tokenizer_and_embedding_resize(
 
     tokenizer = processor.tokenizer
     eo1_special_tokens = [
-        ACTION_START_TOKEN, DEFAULT_ACTION_TOKEN, ACTION_END_TOKEN,
-        STATE_START_TOKEN, DEFAULT_STATE_TOKEN, STATE_END_TOKEN,
-        TASK_VLA_TOKEN, PASS_ACTION_TOKEN
+        ACTION_START_TOKEN,
+        DEFAULT_ACTION_TOKEN,
+        ACTION_END_TOKEN,
+        STATE_START_TOKEN,
+        DEFAULT_STATE_TOKEN,
+        STATE_END_TOKEN,
+        TASK_VLA_TOKEN,
+        PASS_ACTION_TOKEN,
     ]
     num_new_tokens = tokenizer.add_tokens(eo1_special_tokens, special_tokens=True)
 

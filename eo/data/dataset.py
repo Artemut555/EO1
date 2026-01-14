@@ -14,6 +14,7 @@
 
 import os
 import random
+
 import torch
 import transformers
 from lerobot.constants import ACTION, OBS_IMAGE, OBS_STATE
@@ -33,6 +34,7 @@ from eo.constants import (
     DEFAULT_STATE_TOKEN,
     DEFAULT_VIDEO_TOKEN,
     IGNORE_INDEX,
+    PASS_ACTION_TOKEN,
     STATE_END_TOKEN,
     STATE_START_TOKEN,
     SYSTEM_MESSAGE,
@@ -63,6 +65,16 @@ class MultimodaLeRobotDataset(Dataset):
         super().__init__()
         self.args = args
         self.processor = processor
+        tokens = [
+            ACTION_START_TOKEN,
+            DEFAULT_ACTION_TOKEN,
+            ACTION_END_TOKEN,
+            PASS_ACTION_TOKEN,
+        ]
+        self.cached_action_ids = torch.tensor(processor.tokenizer.convert_tokens_to_ids(tokens))
+        self.cached_action_pad_pass_ids = torch.tensor(
+            processor.tokenizer.convert_tokens_to_ids([DEFAULT_ACTION_TOKEN, PASS_ACTION_TOKEN])
+        )
         self.merge_size = processor.image_processor.merge_size
 
         mm_dataset = []
@@ -122,25 +134,25 @@ class MultimodaLeRobotDataset(Dataset):
 
         total_data_len = len(self)
         mm_data_len = len(self.mm_dataset)
-        repo_ids = self.lerobot_dataset.repo_ids
+
         # mm lengths
         lengths = []
         lengths.extend(self.mm_dataset.lengths)
 
         # lerobot lengths
-        _size = 0
-        cu_sizes = self.lerobot_dataset.cumulative_sizes
-        for repo_id, cu_size_i in zip(repo_ids, cu_sizes, strict=False):
-            seq_i = self[mm_data_len + cu_size_i - 1]["input_ids"].shape[0]  # last sequence length
-            num = cu_size_i - _size
-            lengths.extend([seq_i] * num)
-            print(f"{repo_id=}, {seq_i=}, {num=}")
-            _size = cu_size_i
+        if len(self.lerobot_dataset) > 0:
+            _size = 0
+            repo_ids = self.lerobot_dataset.repo_ids
+            cu_sizes = self.lerobot_dataset.cumulative_sizes
+            for repo_id, cu_size_i in zip(repo_ids, cu_sizes, strict=False):
+                seq_i = self[mm_data_len + cu_size_i - 1]["input_ids"].shape[0]  # last sequence length
+                num = cu_size_i - _size
+                lengths.extend([seq_i] * num)
+                print(f"{repo_id=}, {seq_i=}, {num=}")
+                _size = cu_size_i
 
         self.__setattr__("cached_lengths", lengths)
-        assert len(lengths) == total_data_len, (
-            f"Length mismatch: {len(lengths)} != {total_data_len}"
-        )
+        assert len(lengths) == total_data_len, f"Length mismatch: {len(lengths)} != {total_data_len}"
         return lengths
 
     def __len__(self):
@@ -167,9 +179,7 @@ class MultimodaLeRobotDataset(Dataset):
             states = pad_vector(torch.cat(states, dim=-1), self.args.max_action_dim)
             actions = pad_vector(torch.cat(actions, dim=-1), self.args.max_action_dim)
             action_is_pads = action_is_pad.clone()
-            image_replacement = (
-                f"{VISION_START_TOKEN}{DEFAULT_IMAGE_TOKEN}{VISION_END_TOKEN}" * len(images)
-            )
+            image_replacement = f"{VISION_START_TOKEN}{DEFAULT_IMAGE_TOKEN}{VISION_END_TOKEN}" * len(images)
             states_replacement = f"{STATE_START_TOKEN}{DEFAULT_STATE_TOKEN}{STATE_END_TOKEN}"
             sources = {
                 "conversations": [
@@ -187,7 +197,7 @@ class MultimodaLeRobotDataset(Dataset):
                 "image": images,
                 "action_is_pad": [action_is_pads],
             }
-        
+
         if "image" in sources:
             videos = None
             grid_key = "image_grid_thw"
@@ -196,16 +206,14 @@ class MultimodaLeRobotDataset(Dataset):
             image_files = sources["image"]
             if not isinstance(image_files, list):
                 image_files = [image_files]
-            
+
             images = []
             for image_file in image_files:
                 if isinstance(image_file, str) and not image_file.startswith("http"):
                     image_folder = sources["vision_base_path"]
                     image_file = os.path.join(image_folder, image_file)
                 elif isinstance(image_file, torch.Tensor):  # lerobot dataset
-                    image_file = Image.fromarray(
-                        (image_file * 255).to(torch.uint8).permute(1, 2, 0).numpy()
-                    )
+                    image_file = Image.fromarray((image_file * 255).to(torch.uint8).permute(1, 2, 0).numpy())
                 images.append(
                     get_image_info(
                         image_file,
@@ -215,17 +223,17 @@ class MultimodaLeRobotDataset(Dataset):
                         self.image_resized_h,
                     )
                 )
-        
+
         elif "video" in sources:
             images = None
             grid_key = "video_grid_thw"
             pixel_key = "pixel_values_videos"
             video_files = sources["video"]
             video_folder = sources["vision_base_path"]
-            
+
             if not isinstance(video_files, list):
                 video_files = [video_files]
-            
+
             videos = []
             for video_file in video_files:
                 if isinstance(video_file, str) and not video_file.startswith("http"):
@@ -254,9 +262,7 @@ class MultimodaLeRobotDataset(Dataset):
         all_second_gird = []
 
         if len(SYSTEM_MESSAGE) > 0:
-            system_message = (
-                f"{DEFAULT_IM_START_TOKEN}system\n{SYSTEM_MESSAGE}{DEFAULT_IM_END_TOKEN}\n"
-            )
+            system_message = f"{DEFAULT_IM_START_TOKEN}system\n{SYSTEM_MESSAGE}{DEFAULT_IM_END_TOKEN}\n"
             system_message_input_ids = self.processor.tokenizer(
                 system_message, add_special_tokens=False, return_tensors="pt"
             )["input_ids"]
@@ -304,9 +310,9 @@ class MultimodaLeRobotDataset(Dataset):
                 )["input_ids"]
 
             gpt_response = f"{gpt_response['content']}{DEFAULT_IM_END_TOKEN}\n"
-            response_input_ids = self.processor(
-                text=[gpt_response], padding=False, return_tensors="pt"
-            )["input_ids"]
+            response_input_ids = self.processor(text=[gpt_response], padding=False, return_tensors="pt")[
+                "input_ids"
+            ]
             input_ids = torch.cat([prompt_input_ids, response_input_ids], dim=1).squeeze(0)
             labels = torch.cat(
                 [
@@ -316,21 +322,23 @@ class MultimodaLeRobotDataset(Dataset):
                 dim=0,
             )
 
-            # ignore the action token
-            cached_action_ids = torch.tensor(
-                [self.processor.action_token_id, self.processor.action_pass_id]
-            )
-            action_mask = torch.isin(labels, cached_action_ids)
-            labels[action_mask] = IGNORE_INDEX
+            # NOTE: ignore the action and eos tokens
+            # action_mask = torch.isin(labels, self.cached_action_ids)
+            # labels[action_mask] = IGNORE_INDEX
+            # or ignore all the tokens
+            if any(torch.isin(labels, self.cached_action_pad_pass_ids)):
+                labels = torch.full_like(labels, IGNORE_INDEX)
 
             all_input_ids.append(input_ids)
             all_labels.append(labels)
 
         input_ids = torch.cat(all_input_ids, dim=0).to(torch.long)
         labels = torch.cat(all_labels, dim=0).to(torch.long)
+        # attention_mask = (input_ids > -1000000).to(torch.long)
 
         data_dict = {
             "input_ids": input_ids,
+            # "attention_mask": attention_mask,
         }
 
         if not self.args.train_lerobot_only:
@@ -376,7 +384,7 @@ class MultimodaLeRobotDataset(Dataset):
         if not self.lerobot_dataset:
             return
 
-        print(f"qwen-vl {self.args.image_min_pixels=}, {self.args.image_max_pixels=}")
+        print(f"qwen-vl min pixel {self.image_min_pixel}, max pixel {self.image_max_pixel}")
         for dataset in self.lerobot_dataset._datasets:
             meta_features, video_key = dataset.meta.features, dataset.select_video_keys
             for k in video_key:
@@ -384,8 +392,8 @@ class MultimodaLeRobotDataset(Dataset):
                 h_bar, w_bar = smart_resize(
                     h,
                     w,
-                    min_pixels=self.args.image_min_pixels,
-                    max_pixels=self.args.image_max_pixels,
+                    min_pixels=self.image_min_pixel,
+                    max_pixels=self.image_max_pixel,
                 )
                 print(f"{dataset.repo_id:<40} | {k:<40} | resize from {h, w} to {h_bar, w_bar} |")
 
@@ -480,12 +488,8 @@ class PackedDataset(Dataset):
         packed_indices_num = sum(len(indices) for indices in self.packed_indices)
         packed_lengths_sum = sum(self.packed_lengths)
 
-        assert packed_indices_num == len(lengths), (
-            f"Length mismatch: {packed_indices_num} != {len(lengths)}"
-        )
-        assert packed_lengths_sum == sum(lengths), (
-            f"Length mismatch: {packed_lengths_sum} != {sum(lengths)}"
-        )
+        assert packed_indices_num == len(lengths), f"Length mismatch: {packed_indices_num} != {len(lengths)}"
+        assert packed_lengths_sum == sum(lengths), f"Length mismatch: {packed_lengths_sum} != {sum(lengths)}"
 
         print(f"* mini action set: {len(self.mini_action_set)}")
         print(f"* packed indices num: {packed_indices_num}")
@@ -528,7 +532,6 @@ class MultimodaDataCollator(DefaultDataCollator):
         self.pad_token_id = pad_token_id
 
     def __call__(self, examples):
-        # __import__("ipdb").set_trace()
         batch_input_ids = []
         batch_label_ids = []
         batch_pixel_values = []
@@ -555,7 +558,7 @@ class MultimodaDataCollator(DefaultDataCollator):
             batch_position_ids.append(example["position_ids"])
 
             if "labels" in keys:
-                batch_label_ids.extend(example["labels"])
+                batch_label_ids.append(example["labels"])
 
             if "second_per_grid_ts" in keys:
                 batch_second_per_grid_ts.extend(example["second_per_grid_ts"])
@@ -565,9 +568,7 @@ class MultimodaDataCollator(DefaultDataCollator):
                 batch_states.append(example["states"])
                 batch_action_is_pad.append(example["action_is_pad"])
 
-        input_ids = pad_sequence(
-            batch_input_ids, padding_side="right", padding_value=self.pad_token_id
-        )
+        input_ids = pad_sequence(batch_input_ids, padding_side="right", padding_value=self.pad_token_id)
         attention_mask = input_ids.ne(self.pad_token_id)
         batch_position_ids = pad_and_cat(batch_position_ids)
 
@@ -627,7 +628,6 @@ class MultimodaPackedDataCollator(DefaultDataCollator):
     def __call__(self, features, return_tensors=None, separator_id=None):
         return_tensors = return_tensors or self.return_tensors
         separator_id = separator_id or self.separator_id
-        # is_labels_provided = "labels" in features[0]
 
         batch_input_ids = []
         batch_label_ids = []
@@ -670,13 +670,13 @@ class MultimodaPackedDataCollator(DefaultDataCollator):
                 batch_states.append(example["states"])
                 batch_action_is_pad.append(example["action_is_pad"])
 
-        seq_lens = torch.tensor([0] + seq_lens, dtype=torch.int32)
-        cumsum_seq_lens = torch.cumsum(seq_lens, dim=0, dtype=torch.int32)
+        # seq_lens = torch.tensor([0] + seq_lens, dtype=torch.int32)
+        # cumsum_seq_lens = torch.cumsum(seq_lens, dim=0, dtype=torch.int32)
 
         data_dict = {
             "input_ids": torch.cat(batch_input_ids, dim=0).unsqueeze(0),  # (b=1, s)
             "position_ids": torch.cat(batch_position_ids, dim=2),
-            "attention_mask": cumsum_seq_lens.unsqueeze(0),
+            # "attention_mask": cumsum_seq_lens.unsqueeze(0),
         }
 
         if len(batch_label_ids) > 0:

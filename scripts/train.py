@@ -20,6 +20,7 @@ from eo.model.processing_eo1 import EO1VisionProcessor
 from eo.train.pipeline_config import TrainPipelineConfig
 from eo.train.train_utils import (
     configure_llm,
+    configure_flow,
     configure_processor,
     configure_vision_tower,
     find_target_linear_names,
@@ -53,7 +54,7 @@ def train():
             action_act=training_args.action_act,
         )
         vlm_backbone = Qwen2_5_VLForConditionalGeneration.from_pretrained(
-            training_args.vlm_name_or_path, dtype=compute_dtype
+            training_args.vlm_name_or_path, dtype=compute_dtype, attn_implementation=training_args.attn_implementation,
         )
         model = EO1VisionFlowMatchingModel(config, vlm_backbone=vlm_backbone)
     else:
@@ -73,6 +74,7 @@ def train():
 
     # configure model
     configure_llm(model.vlm_backbone, training_args)
+    configure_flow(model, training_args)
     configure_vision_tower(model.vlm_backbone, training_args, compute_dtype, training_args.device)
     model.config.action_chunk_size = training_args.chunk_size
 
@@ -101,6 +103,9 @@ def train():
     # load dataset
     data_module = make_supervised_data_module(processor=processor, args=training_args)
     configure_processor(processor, data_module["train_dataset"], training_args)
+    
+    processor.robot_config["max_action_dim"] = training_args.max_action_dim
+    processor.robot_config["action_chunk_size"] = training_args.chunk_size
 
     model.config.use_cache = False
     if training_args.gradient_checkpointing:

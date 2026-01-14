@@ -10,7 +10,6 @@ class EOBench(ImageBaseDataset):
     TYPE = "MCQ"
 
     def __init__(self, dataset="EOBench", data_file=None, data_root=None, skip_noimg=True):
-        ROOT = LMUDataRoot()
         # You can override this variable to save image files to a different directory
         self.dataset_name = dataset
         self.data_file = data_file
