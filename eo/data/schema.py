@@ -24,6 +24,9 @@ class MMDatasetConfig:
     json_path: str
     sampling_strategy: str = "all"
     vision_base_path: str | None = None
+    vision_backend: str = "local"
+    s3_bucket: str | None = None
+    s3_prefix: str | None = None
 
 
 @dataclass

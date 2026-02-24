@@ -117,6 +117,9 @@ class MultimodaDataset(Dataset):
             dataset_lens.append(len(cur_data_dict))
             for data in cur_data_dict:
                 data["vision_base_path"] = dataset.vision_base_path
+                data["vision_backend"] = getattr(dataset, "vision_backend", "local")
+                data["s3_bucket"] = getattr(dataset, "s3_bucket", None)
+                data["s3_prefix"] = getattr(dataset, "s3_prefix", None)
             list_data_dict.extend(cur_data_dict)
 
             # prepare lens for packing
@@ -143,8 +146,14 @@ class MultimodaDataset(Dataset):
         if "hf_idx" in sources:
             hf_idx, data_idx = sources["hf_idx"], sources["data_idx"]
             vision_base_path = sources["vision_base_path"]
+            vision_backend = sources.get("vision_backend", "local")
+            s3_bucket = sources.get("s3_bucket")
+            s3_prefix = sources.get("s3_prefix")
             sources = self.hf_datas[hf_idx][data_idx]
             sources["vision_base_path"] = vision_base_path
+            sources["vision_backend"] = vision_backend
+            sources["s3_bucket"] = s3_bucket
+            sources["s3_prefix"] = s3_prefix
             key = "conversation"
 
         transformed_source = copy.deepcopy(sources)

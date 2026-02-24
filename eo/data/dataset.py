@@ -44,6 +44,7 @@ from eo.constants import (
 )
 from eo.data.lerobot_dataset import MultiLeRobotDataset
 from eo.data.multim_dataset import MultimodaDataset, pad_vector
+from eo.data.s3_loader import load_image_from_s3
 from eo.data.schema import DataConfig, LerobotConfig
 from eo.data.transforms import ImageTransforms, ImageTransformsConfig
 from eo.train.pipeline_config import TrainPipelineConfig
@@ -210,8 +211,15 @@ class MultimodaLeRobotDataset(Dataset):
             images = []
             for image_file in image_files:
                 if isinstance(image_file, str) and not image_file.startswith("http"):
-                    image_folder = sources["vision_base_path"]
-                    image_file = os.path.join(image_folder, image_file)
+                    backend = sources.get("vision_backend", "local")
+                    if backend == "s3":
+                        bucket = sources.get("s3_bucket") or "gigaeye-data"
+                        base_path = sources.get("vision_base_path") or sources.get("s3_prefix") or ""
+                        s3_key = f"{base_path.rstrip('/')}/{image_file}" if base_path else image_file
+                        image_file = load_image_from_s3(bucket, s3_key)
+                    else:
+                        image_folder = sources["vision_base_path"]
+                        image_file = os.path.join(image_folder, image_file)
                 elif isinstance(image_file, torch.Tensor):  # lerobot dataset
                     image_file = Image.fromarray((image_file * 255).to(torch.uint8).permute(1, 2, 0).numpy())
                 images.append(

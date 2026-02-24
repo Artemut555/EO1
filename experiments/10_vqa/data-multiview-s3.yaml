@@ -1,0 +1,17 @@
+# Multiview ChatML training data config (S3 backend)
+# Dataset: multiview correspondence QA from YTSaurus
+# ~43K samples, all with 2 images per sample
+#
+# Images are loaded directly from S3 (no local download needed).
+# Run convert_chatml_to_eo.py first to generate the JSONL:
+#   python experiments/10_vqa/convert_chatml_to_eo.py
+#
+# Image S3 keys in the JSONL are full paths like:
+#   visiondata/robotics/gregorykogan/eo-data/multiview_images/0028-0000/xxx.png
+# With no vision_base_path, dataset.py uses the key directly.
+
+mm_datasets:
+  - json_path: ../../data_multiview_chatml/jsonl/multiview_chatml.jsonl
+    vision_backend: s3
+    s3_bucket: gigaeye-data
+    sampling_strategy: random:100%
