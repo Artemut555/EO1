@@ -46,6 +46,9 @@ import sys
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from pathlib import Path
 
+# Ensure EO1 package is importable when run as script
+sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
+from eo.data.chatml import chatml_row_to_llava
 
 # -----------------------------------------------
 # Configuration
@@ -57,57 +60,10 @@ DATA_DIR = Path("../../data_multiview_chatml")
 IMAGES_DIR = DATA_DIR / "images"
 JSONL_DIR = DATA_DIR / "jsonl"
 
-IMAGE_TOKEN = "<image>"
-
 
 def convert_chatml_row(row: dict) -> dict | None:
-    """Convert a single ChatML row to EO LLaVA format.
-
-    Returns None if the row is invalid or should be skipped.
-    """
-    dialogue = row.get("dialogue")
-    if not dialogue:
-        return None
-
-    image_paths = row.get("image_paths", [])
-    if not image_paths:
-        return None
-
-    conversations = []
-    for msg in dialogue:
-        role = msg.get("role", "")
-        content = msg.get("content", "")
-
-        if role == "system":
-            # Skip system message; EO injects its own
-            continue
-        elif role == "user":
-            # Count images attached to this user message
-            files = msg.get("files", [])
-            n_images = len([f for f in files if f.get("type") == "image"])
-            # If no files metadata, fall back to image_paths count
-            if n_images == 0:
-                n_images = len(image_paths)
-            image_prefix = IMAGE_TOKEN * n_images
-            conversations.append({
-                "from": "human",
-                "value": f"{image_prefix}{content}",
-            })
-        elif role == "assistant":
-            conversations.append({
-                "from": "gpt",
-                "value": content,
-            })
-
-    # Must have at least one user-assistant pair
-    if len(conversations) < 2:
-        return None
-
-    entry = {
-        "conversations": conversations,
-        "image": image_paths if len(image_paths) > 1 else image_paths[0],
-    }
-    return entry
+    """Convert a single ChatML row to EO LLaVA format."""
+    return chatml_row_to_llava(row)
 
 
 def read_yt_table(limit: int | None = None) -> list[dict]:

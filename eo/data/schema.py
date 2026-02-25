@@ -15,8 +15,12 @@
 """Schema for the dataset configuration."""
 
 from dataclasses import dataclass, field
+from typing import Literal
 
 import yaml
+
+# Supported multimodal text+image dataset formats (per config).
+MMFormat = Literal["llava", "chatml"]
 
 
 @dataclass
@@ -27,6 +31,11 @@ class MMDatasetConfig:
     vision_backend: str = "local"
     s3_bucket: str | None = None
     s3_prefix: str | None = None
+    # "llava": JSONL with conversations (from/human,gpt) + image paths.
+    # "chatml": JSONL with dialogue (role/user,assistant) + image_paths; converted to LLaVA-like internally.
+    format: MMFormat = "llava"
+    # Optional YT table path for docs/download scripts; dataset loads from json_path (e.g. after download).
+    yt_table: str | None = None
 
 
 @dataclass

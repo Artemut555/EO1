@@ -40,6 +40,7 @@ from eo.constants import (
     VISION_END_TOKEN,
     VISION_START_TOKEN,
 )
+from eo.data.chatml import chatml_row_to_llava
 from eo.data.schema import MMDatasetConfig
 
 
@@ -69,8 +70,23 @@ class MultimodaDataset(Dataset):
 
             if json_path.endswith(".jsonl"):
                 cur_data_dict = []
-                for line in open(json_path):
-                    cur_data_dict.append(json.loads(line.strip()))
+                data_format = getattr(dataset, "format", "llava")
+                with open(json_path, encoding="utf-8") as f:
+                    for line in f:
+                        line = line.strip()
+                        if not line:
+                            continue
+                        row = json.loads(line)
+                        if data_format == "chatml":
+                            entry = chatml_row_to_llava(row)
+                            if entry is None:
+                                continue
+                            entry["seq_length"] = entry.get("seq_length", 196)
+                            cur_data_dict.append(entry)
+                        else:
+                            # LLaVA-style JSONL: ensure seq_length for packing (avoids seq_len=0 warnings)
+                            row["seq_length"] = row.get("seq_length", 196)
+                            cur_data_dict.append(row)
             elif json_path.endswith(".json"):
                 cur_data_dict = json.load(open(json_path))
             else:
@@ -118,13 +134,14 @@ class MultimodaDataset(Dataset):
             for data in cur_data_dict:
                 data["vision_base_path"] = dataset.vision_base_path
                 data["vision_backend"] = getattr(dataset, "vision_backend", "local")
-                data["s3_bucket"] = getattr(dataset, "s3_bucket", None)
+                # Preserve per-row s3_bucket (e.g. ChatML from YT) if present
+                data["s3_bucket"] = data.get("s3_bucket") or getattr(dataset, "s3_bucket", None)
                 data["s3_prefix"] = getattr(dataset, "s3_prefix", None)
             list_data_dict.extend(cur_data_dict)
 
-            # prepare lens for packing
+            # prepare lens for packing (default 196 matches LLaVA/ChatML default)
             for line in cur_data_dict:
-                seq_len = line.get("seq_length", 0)
+                seq_len = line.get("seq_length", 196)
                 seq_lengths.append(seq_len)
                 if seq_len == 0:
                     print(

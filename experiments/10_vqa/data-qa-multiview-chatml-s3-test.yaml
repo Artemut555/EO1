@@ -1,0 +1,10 @@
+# Same sample as -local, but load images from S3 (for testing S3 path).
+# Use after: python experiments/10_vqa/download_qa_multiview_local.py --limit 10
+# JSONL has S3 keys in image_paths; this config uses them directly.
+
+mm_datasets:
+  - json_path: experiments/10_vqa/data/qa-multiview_qa/jsonl/qa-multiview_qa_chatml.jsonl
+    format: chatml
+    vision_backend: s3
+    s3_bucket: gigaeye-data
+    sampling_strategy: all
