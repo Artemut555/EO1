@@ -31,6 +31,8 @@ from eo.train.trainer import EO1VisionTrainer
 
 logger = get_logger(__name__, log_level="INFO")
 
+BENCHMARK_MODE = os.environ.get("BENCHMARK", "").lower() in ("true", "1", "yes")
+
 
 def train():
     parser = HfArgumentParser(TrainPipelineConfig)
@@ -123,6 +125,27 @@ def train():
     trainer = EO1VisionTrainer(
         model=model, processing_class=processor, args=training_args, **data_module
     )
+
+    if BENCHMARK_MODE:
+        from eo.train.benchmark_callback import BenchmarkCallback
+
+        vision_backend = "unknown"
+        if training_args.data_path and training_args.data_path.endswith(".yaml"):
+            import yaml
+            with open(training_args.data_path) as f:
+                dcfg = yaml.safe_load(f)
+            backends = {ds.get("vision_backend", "local") for ds in dcfg.get("mm_datasets", [])}
+            vision_backend = ",".join(sorted(backends))
+
+        bench_cb = BenchmarkCallback(
+            metadata={
+                "vision_backend": vision_backend,
+                "dataset": training_args.data_path,
+                "pack_dataset": training_args.pack_dataset,
+            },
+        )
+        trainer.add_callback(bench_cb)
+        logger.info("Benchmark mode ON: per-step timing + data-load instrumentation enabled")
 
     # aggregate data lengths for packing
     if training_args.pack_dataset:
