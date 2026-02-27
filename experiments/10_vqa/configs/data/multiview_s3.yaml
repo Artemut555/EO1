@@ -1,0 +1,8 @@
+# Multiview correspondence QA, LLaVA format, S3 images
+# Source: ~43K samples converted from ChatML, images in S3
+# Download JSONL: python experiments/10_vqa/scripts/download_multiview.py --format llava
+mm_datasets:
+  - json_path: ../../data_multiview_chatml/jsonl/multiview_chatml.jsonl
+    vision_backend: s3
+    s3_bucket: gigaeye-data
+    sampling_strategy: random:100%

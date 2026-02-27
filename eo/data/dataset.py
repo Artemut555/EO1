@@ -163,6 +163,17 @@ class MultimodaLeRobotDataset(Dataset):
             return len(self.mm_dataset) + len(self.lerobot_dataset)
 
     def __getitem__(self, i) -> dict[str, torch.Tensor]:
+        try:
+            return self._getitem_inner(i)
+        except (OSError, IOError, Exception) as exc:
+            import random
+            import logging
+            logger = logging.getLogger(__name__)
+            logger.warning("__getitem__(%d) failed (%s: %s), sampling a random replacement", i, type(exc).__name__, exc)
+            alt = random.randint(0, len(self) - 1)
+            return self._getitem_inner(alt)
+
+    def _getitem_inner(self, i) -> dict[str, torch.Tensor]:
         if i < len(self.mm_dataset):
             sources = self.mm_dataset[i]
         else:

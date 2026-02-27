@@ -1,0 +1,9 @@
+# Multiview QA, ChatML format, S3 images (for cloud runs)
+# Source: qa-multiview_qa from YTSaurus, images loaded from S3
+# Download JSONL: python experiments/10_vqa/scripts/download_multiview.py --format chatml --no-download-images
+mm_datasets:
+  - json_path: /home/jovyan/zavarza/projects/extra/eo/data/qa_multiview_chatml/jsonl/qa-multiview_qa_chatml.jsonl
+    format: chatml
+    vision_backend: s3
+    s3_bucket: gigaeye-data
+    sampling_strategy: all

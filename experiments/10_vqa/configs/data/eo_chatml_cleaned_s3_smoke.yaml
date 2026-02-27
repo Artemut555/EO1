@@ -1,0 +1,8 @@
+# EO ChatML cleaned, small sample for local 2-GPU packing smoke test (S3 images).
+# One file, first:400 samples. Use with PROFILE=local_2gpu_pack.
+mm_datasets:
+  - json_path: /home/jovyan/zavarza/projects/extra/eo/data/chatml_full_eo_cleaned/interleave-free_chat.jsonl
+    format: chatml
+    vision_backend: s3
+    s3_bucket: gigaeye-data
+    sampling_strategy: first:400

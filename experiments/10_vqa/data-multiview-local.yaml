@@ -1,8 +1,0 @@
-# Multiview training data config (local images)
-# Dataset: multiview correspondence QA, LLaVA-style JSONL.
-# Images under extra/eo/data/multiview/images/ (visiondata/.../multiview_images/...).
-
-mm_datasets:
-  - json_path: ../../../extra/eo/data/multiview/jsonl/multiview_chatml.jsonl
-    vision_base_path: ../../../extra/eo/data/multiview/images
-    sampling_strategy: first:200

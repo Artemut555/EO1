@@ -1,0 +1,83 @@
+# EO ChatML cleaned (state/action removed), full dataset, S3 images.
+# Use when project/extra folder is mounted (e.g. cloud.ru). 16 files, random:100%.
+mm_datasets:
+  - json_path: /home/jovyan/zavarza/projects/extra/eo/data/chatml_full_eo_cleaned/qa-affordance_qa.jsonl
+    format: chatml
+    vision_backend: s3
+    s3_bucket: gigaeye-data
+    sampling_strategy: random:100%
+  - json_path: /home/jovyan/zavarza/projects/extra/eo/data/chatml_full_eo_cleaned/qa-episode_caption.jsonl
+    format: chatml
+    vision_backend: s3
+    s3_bucket: gigaeye-data
+    sampling_strategy: random:100%
+  - json_path: /home/jovyan/zavarza/projects/extra/eo/data/chatml_full_eo_cleaned/qa-failure_detection.jsonl
+    format: chatml
+    vision_backend: s3
+    s3_bucket: gigaeye-data
+    sampling_strategy: random:100%
+  - json_path: /home/jovyan/zavarza/projects/extra/eo/data/chatml_full_eo_cleaned/qa-multiview_qa.jsonl
+    format: chatml
+    vision_backend: s3
+    s3_bucket: gigaeye-data
+    sampling_strategy: random:100%
+  - json_path: /home/jovyan/zavarza/projects/extra/eo/data/chatml_full_eo_cleaned/qa-object_referring_qa.jsonl
+    format: chatml
+    vision_backend: s3
+    s3_bucket: gigaeye-data
+    sampling_strategy: random:100%
+  - json_path: /home/jovyan/zavarza/projects/extra/eo/data/chatml_full_eo_cleaned/qa-physical_common_sense.jsonl
+    format: chatml
+    vision_backend: s3
+    s3_bucket: gigaeye-data
+    sampling_strategy: random:100%
+  - json_path: /home/jovyan/zavarza/projects/extra/eo/data/chatml_full_eo_cleaned/qa-points_qa.jsonl
+    format: chatml
+    vision_backend: s3
+    s3_bucket: gigaeye-data
+    sampling_strategy: random:100%
+  - json_path: /home/jovyan/zavarza/projects/extra/eo/data/chatml_full_eo_cleaned/qa-process_verification.jsonl
+    format: chatml
+    vision_backend: s3
+    s3_bucket: gigaeye-data
+    sampling_strategy: random:100%
+  - json_path: /home/jovyan/zavarza/projects/extra/eo/data/chatml_full_eo_cleaned/qa-relation_reasoning.jsonl
+    format: chatml
+    vision_backend: s3
+    s3_bucket: gigaeye-data
+    sampling_strategy: random:100%
+  - json_path: /home/jovyan/zavarza/projects/extra/eo/data/chatml_full_eo_cleaned/qa-subtask_qa.jsonl
+    format: chatml
+    vision_backend: s3
+    s3_bucket: gigaeye-data
+    sampling_strategy: random:100%
+  - json_path: /home/jovyan/zavarza/projects/extra/eo/data/chatml_full_eo_cleaned/qa-task_planning.jsonl
+    format: chatml
+    vision_backend: s3
+    s3_bucket: gigaeye-data
+    sampling_strategy: random:100%
+  - json_path: /home/jovyan/zavarza/projects/extra/eo/data/chatml_full_eo_cleaned/qa-trajectory_qa.jsonl
+    format: chatml
+    vision_backend: s3
+    s3_bucket: gigaeye-data
+    sampling_strategy: random:100%
+  - json_path: /home/jovyan/zavarza/projects/extra/eo/data/chatml_full_eo_cleaned/interleave-free_chat.jsonl
+    format: chatml
+    vision_backend: s3
+    s3_bucket: gigaeye-data
+    sampling_strategy: random:100%
+  - json_path: /home/jovyan/zavarza/projects/extra/eo/data/chatml_full_eo_cleaned/interleave-random_qa.jsonl
+    format: chatml
+    vision_backend: s3
+    s3_bucket: gigaeye-data
+    sampling_strategy: random:100%
+  - json_path: /home/jovyan/zavarza/projects/extra/eo/data/chatml_full_eo_cleaned/interleave-temporal.jsonl
+    format: chatml
+    vision_backend: s3
+    s3_bucket: gigaeye-data
+    sampling_strategy: random:100%
+  - json_path: /home/jovyan/zavarza/projects/extra/eo/data/chatml_full_eo_cleaned/interleave-trajectory.jsonl
+    format: chatml
+    vision_backend: s3
+    s3_bucket: gigaeye-data
+    sampling_strategy: random:100%

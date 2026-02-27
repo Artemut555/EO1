@@ -1,0 +1,10 @@
+# EO ChatML cleaned (state/action pairs removed), S3 images
+# Source: /home/jovyan/zavarza/projects/extra/eo/data/chatml_full_eo_cleaned
+# Test run: use one file + small sample for quick 2-GPU smoke test.
+# Use conda env "eo" for multi-worker S3 loading; else NUM_WORKERS=0 if SSL errors in workers.
+mm_datasets:
+  - json_path: /home/jovyan/zavarza/projects/extra/eo/data/chatml_full_eo_cleaned/interleave-free_chat.jsonl
+    format: chatml
+    vision_backend: s3
+    s3_bucket: gigaeye-data
+    sampling_strategy: first:300

@@ -1,4 +1,5 @@
-# LLaVA-style only (refcoco) for RoPE test - no ChatML, no lerobot
+# RefCOCO demo subset (bundled with EO1 repo)
+# Small LLaVA-style dataset for testing the pipeline without downloading data.
 mm_datasets:
   - json_path: demo_data/refcoco/refcoco.jsonl
     vision_base_path: demo_data/refcoco
