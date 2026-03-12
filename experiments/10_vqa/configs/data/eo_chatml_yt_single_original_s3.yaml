@@ -1,0 +1,9 @@
+# YT single table: original (eo-data-single-unfiltered), ChatML, S3 images.
+# Local path; for cloud use eo_chatml_yt_single_original_s3_cloud.yaml after copying to nfs2.
+# Source YT: //home/visiondata/shared_res/train/eo-data-single-unfiltered
+mm_datasets:
+  - json_path: /home/jovyan/zavarza/projects/extra/eo/data/yt_single_original/data.jsonl
+    format: chatml
+    vision_backend: s3
+    s3_bucket: gigaeye-data
+    sampling_strategy: random:100%

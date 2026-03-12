@@ -1,0 +1,9 @@
+# YT single table: rewritten (eo-data-single-filtered), ChatML, S3 images.
+# Local path; for cloud use eo_chatml_yt_single_rewritten_s3_cloud.yaml after copying to nfs2.
+# Source YT: //home/visiondata/shared_res/train/eo-data-single-filtered
+mm_datasets:
+  - json_path: /home/jovyan/zavarza/projects/extra/eo/data/yt_single_rewritten/data.jsonl
+    format: chatml
+    vision_backend: s3
+    s3_bucket: gigaeye-data
+    sampling_strategy: random:100%
