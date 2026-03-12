@@ -52,11 +52,13 @@ LR="${LR:-2e-5}"
 VISION_LR="${VISION_LR:-2e-6}"
 MERGER_LR="${MERGER_LR:-2e-5}"
 WARMUP_RATIO="${WARMUP_RATIO:-0.1}"
+SAVE_STRATEGY="${SAVE_STRATEGY:-steps}"
 SAVE_STEPS="${SAVE_STEPS:-10}"
 SAVE_TOTAL_LIMIT="${SAVE_TOTAL_LIMIT:-1}"
 LOGGING_STEPS="${LOGGING_STEPS:-1}"
 RUN_NAME="${RUN_NAME:-vqa_$(date +%m%d_%H%M)}"
 OUTPUT_DIR="${OUTPUT_DIR:-}"
+OUTPUT_BASE="${OUTPUT_BASE:-}"
 REPORT_TO="${REPORT_TO:-none}"
 EXTRA_ARGS="${EXTRA_ARGS:-}"
 
@@ -88,6 +90,8 @@ fi
 echo "  Attn impl:     ${ATTN_IMPL}"
 echo "  Pack dataset:  ${PACK_DATASET}"
 echo "  Max packed:    ${MAX_PACKED_LENGTH}"
+echo "  Save strategy: ${SAVE_STRATEGY}"
+echo "  Save total:    ${SAVE_TOTAL_LIMIT}"
 echo "  Run name:      ${RUN_NAME}"
 echo "============================================"
 
@@ -133,7 +137,7 @@ TRAIN_ARGS=(
     --warmup-ratio "${WARMUP_RATIO}"
     --lr-scheduler-type cosine
     --gradient-checkpointing True
-    --save-strategy steps
+    --save-strategy "${SAVE_STRATEGY}"
     --save-steps "${SAVE_STEPS}"
     --save-total-limit "${SAVE_TOTAL_LIMIT}"
     --logging-steps "${LOGGING_STEPS}"
@@ -150,6 +154,8 @@ fi
 
 if [ -n "${OUTPUT_DIR}" ]; then
     TRAIN_ARGS+=(--output-dir "${OUTPUT_DIR}")
+elif [ -n "${OUTPUT_BASE}" ]; then
+    TRAIN_ARGS+=(--output-base "${OUTPUT_BASE}")
 fi
 
 # --------------- Launch ---------------

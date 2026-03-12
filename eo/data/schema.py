@@ -24,6 +24,17 @@ MMFormat = Literal["llava", "chatml"]
 
 
 @dataclass
+class MDSDatasetConfig:
+    """MDS streaming dataset with embedded images (mds_shard_writer format)."""
+
+    remote: str | None = None  # e.g. s3://bucket/prefix/mds
+    local: str | None = None  # local cache path (required when remote is set)
+    shuffle: bool = False
+    shuffle_seed: int = 9176
+    cache_limit_shards: int = 32
+
+
+@dataclass
 class MMDatasetConfig:
     json_path: str
     sampling_strategy: str = "all"
@@ -57,6 +68,7 @@ class LerobotConfig:
 @dataclass
 class DataConfig:
     mm_datasets: list[MMDatasetConfig] = field(default_factory=list)
+    mds_datasets: list[MDSDatasetConfig] = field(default_factory=list)
     lerobot_datasets: list[LerobotConfig] = field(default_factory=list)
 
     @classmethod
@@ -65,5 +77,6 @@ class DataConfig:
             raw = yaml.safe_load(f)
         return cls(
             mm_datasets=[MMDatasetConfig(**d) for d in raw.get("mm_datasets") or []],
+            mds_datasets=[MDSDatasetConfig(**d) for d in raw.get("mds_datasets") or []],
             lerobot_datasets=[LerobotConfig(**d) for d in raw.get("lerobot_datasets") or []],
         )

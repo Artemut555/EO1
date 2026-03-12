@@ -1,0 +1,9 @@
+# EO dual-dataset (filtered): original QA, no <state>/<action> in questions, S3 images.
+# Local path. Use with eo1_dual_filtered_original_32gpu profile.
+# Source: filter_dual_chatml.py from chatml_dual/
+mm_datasets:
+  - json_path: /home/jovyan/zavarza/projects/extra/eo/data/chatml_dual_filtered/chatml_original.jsonl
+    format: chatml
+    vision_backend: s3
+    s3_bucket: gigaeye-data
+    sampling_strategy: random:100%

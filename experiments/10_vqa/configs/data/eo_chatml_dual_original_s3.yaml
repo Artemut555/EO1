@@ -1,0 +1,10 @@
+# EO dual-dataset: original QA (from YT table), S3 images.
+# Local table path; checkpoints/outputs go to nfs2 via OUTPUT_BASE.
+# Use with eo1_dual_original_32gpu profile for packed 32-GPU training.
+# Source YT: //home/visiondata/users/fasafonov/datasets/eo1/markups/markups_all_data_prepared_v2
+mm_datasets:
+  - json_path: /home/jovyan/zavarza/projects/extra/eo/data/chatml_dual/chatml_original.jsonl
+    format: chatml
+    vision_backend: s3
+    s3_bucket: gigaeye-data
+    sampling_strategy: random:100%

@@ -1,0 +1,9 @@
+# EO dual-dataset: original QA, S3 images. Cloud path (nfs2 workspace).
+# Use when project/data is at /workspace-SR004.nfs2/avzavarzin/
+# Copy chatml_dual to nfs2: cp -r extra/eo/data/chatml_dual /workspace-SR004.nfs2/avzavarzin/extra/eo/data/
+mm_datasets:
+  - json_path: /workspace-SR004.nfs2/avzavarzin/extra/eo/data/chatml_dual/chatml_original.jsonl
+    format: chatml
+    vision_backend: s3
+    s3_bucket: gigaeye-data
+    sampling_strategy: random:100%

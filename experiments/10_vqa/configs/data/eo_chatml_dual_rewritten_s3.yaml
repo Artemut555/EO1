@@ -1,0 +1,10 @@
+# EO dual-dataset: rewritten QA (from YT table), S3 images.
+# Local table path; checkpoints/outputs go to nfs2 via OUTPUT_BASE.
+# Use with eo1_dual_rewritten_32gpu profile for packed 32-GPU training.
+# When new_question is empty, create_dual_chatml copies original pair to rewritten.
+mm_datasets:
+  - json_path: /home/jovyan/zavarza/projects/extra/eo/data/chatml_dual/chatml_rewritten.jsonl
+    format: chatml
+    vision_backend: s3
+    s3_bucket: gigaeye-data
+    sampling_strategy: random:100%

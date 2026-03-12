@@ -1,0 +1,8 @@
+# MDS streaming dataset - local only (no S3)
+# For testing: use data from prepare_mds_dual_filtered_rewritten.py --local-test
+# Path should point to directory with index.json and shard.*.mds files
+mds_datasets:
+  - local: /tmp/mds_train_test
+    shuffle: true
+    shuffle_seed: 42
+    cache_limit_shards: 16

@@ -1,0 +1,17 @@
+# MDS streaming dataset with embedded images (mds_shard_writer format)
+# Images are stored as binary in TAR payloads, not URLs.
+# Use when data is pre-converted to MDS via gigavision_tools/mds_shard_writer.
+#
+# Example:
+#   mds_datasets:
+#     - remote: s3://gigaeye-share/igfrolov/mds
+#       local: /tmp/mds-cache
+#       shuffle: true
+#       shuffle_seed: 9176
+#       cache_limit_shards: 32
+mds_datasets:
+  - remote: s3://gigaeye-share/igfrolov/mds
+    local: /tmp/mds-cache
+    shuffle: true
+    shuffle_seed: 9176
+    cache_limit_shards: 32

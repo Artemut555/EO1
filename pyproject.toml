@@ -57,6 +57,7 @@ dependencies = [
 
     # Binpacking dependency
     "binpacking>=1.5.0",
+    "mosaicml-streaming>=0.7.0",
     "qwen_vl_utils==0.0.11",
     "ujson>=5.11.0",
 ]

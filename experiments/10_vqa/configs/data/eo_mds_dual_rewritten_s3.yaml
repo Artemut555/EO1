@@ -1,0 +1,9 @@
+# MDS streaming dataset: dual filtered rewritten (Qwen tokenized, embedded images)
+# Source: chatml_dual_filtered/chatml_rewritten.jsonl via create_yt_tokenized_table + yt_build_and_load_mds
+# Remote: s3://gigaeye-data/visiondata/users/avzavarzin/mds
+mds_datasets:
+  - remote: s3://gigaeye-data/visiondata/users/avzavarzin/mds
+    local: /tmp/mds-eo-dual-rewritten-cache
+    shuffle: true
+    shuffle_seed: 42
+    cache_limit_shards: 32

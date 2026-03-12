@@ -1,0 +1,7 @@
+# MDS streaming dataset - local (for testing without S3/YT pipeline)
+# Create via: prepare_mds_dual_filtered_rewritten.py --local-test --num-samples 20 --output /tmp/mds_eo_dual_test
+mds_datasets:
+  - local: /tmp/mds_eo_dual_test
+    shuffle: true
+    shuffle_seed: 42
+    cache_limit_shards: 16

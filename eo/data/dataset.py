@@ -43,9 +43,10 @@ from eo.constants import (
     VISION_START_TOKEN,
 )
 from eo.data.lerobot_dataset import MultiLeRobotDataset
+from eo.data.mds_dataset import EOMDSStreamingDataset
 from eo.data.multim_dataset import MultimodaDataset, pad_vector
 from eo.data.s3_loader import load_image_from_s3
-from eo.data.schema import DataConfig, LerobotConfig
+from eo.data.schema import DataConfig, LerobotConfig, MDSDatasetConfig
 from eo.data.transforms import ImageTransforms, ImageTransformsConfig
 from eo.train.pipeline_config import TrainPipelineConfig
 
@@ -100,14 +101,37 @@ class MultimodaLeRobotDataset(Dataset):
                 chunk_size=args.chunk_size,
             )
 
-        # load mm datasets
+        # load mm datasets (JSONL + S3/local)
+        mm_parts = []
         if len(data_configs.mm_datasets) > 0:
-            mm_dataset = MultimodaDataset(
-                data_configs=data_configs.mm_datasets,
-                # max_packed_length=args.max_packed_length,
-                max_action_dim=args.max_action_dim,
-                chunk_size=args.chunk_size,
+            mm_parts.append(
+                MultimodaDataset(
+                    data_configs=data_configs.mm_datasets,
+                    max_action_dim=args.max_action_dim,
+                    chunk_size=args.chunk_size,
+                )
             )
+
+        # load MDS streaming datasets (embedded images)
+        for mds_cfg in data_configs.mds_datasets:
+            mm_parts.append(
+                EOMDSStreamingDataset(
+                    args=args,
+                    processor=processor,
+                    remote=mds_cfg.remote,
+                    local=mds_cfg.local,
+                    shuffle=mds_cfg.shuffle,
+                    shuffle_seed=mds_cfg.shuffle_seed,
+                    cache_limit_shards=mds_cfg.cache_limit_shards,
+                )
+            )
+
+        if len(mm_parts) == 0:
+            mm_dataset = []
+        elif len(mm_parts) == 1:
+            mm_dataset = mm_parts[0]
+        else:
+            mm_dataset = torch.utils.data.ConcatDataset(mm_parts)
 
         # multi-modal datasets
         self.mm_dataset = mm_dataset
@@ -138,7 +162,11 @@ class MultimodaLeRobotDataset(Dataset):
 
         # mm lengths
         lengths = []
-        lengths.extend(self.mm_dataset.lengths)
+        if isinstance(self.mm_dataset, torch.utils.data.ConcatDataset):
+            for ds in self.mm_dataset.datasets:
+                lengths.extend(ds.lengths)
+        elif hasattr(self.mm_dataset, "lengths") and len(self.mm_dataset) > 0:
+            lengths.extend(self.mm_dataset.lengths)
 
         # lerobot lengths
         if len(self.lerobot_dataset) > 0:
@@ -176,6 +204,9 @@ class MultimodaLeRobotDataset(Dataset):
     def _getitem_inner(self, i) -> dict[str, torch.Tensor]:
         if i < len(self.mm_dataset):
             sources = self.mm_dataset[i]
+            # MDS dataset returns pre-processed format (input_ids, labels, position_ids, etc.)
+            if "input_ids" in sources and "labels" in sources:
+                return sources
         else:
             item = self.lerobot_dataset[i - len(self.mm_dataset)]
             images, actions, states = [], [], []

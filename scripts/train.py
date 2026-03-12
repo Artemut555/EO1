@@ -162,7 +162,7 @@ def train():
         packed_lens = data_module["train_dataset"].packed_lengths
 
         logger.info(
-            f"group length {len(lengths)=}, {min(lengths)=}, {max(lengths)=},",
+            f"group length {len(lengths)=}, {min(lengths)=}, {max(lengths)=}, "
             f"packed data {len(packed_lens)=}, {min(packed_lens)=}, {max(packed_lens)=}, {np.mean(packed_lens)=}",
         )
     else:
