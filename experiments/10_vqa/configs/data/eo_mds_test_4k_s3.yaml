@@ -1,0 +1,8 @@
+# MDS test_4k: 4k tokenized table -> d-gigachat-vision-1/users/avzavarzin/mds/test_4k
+# Index is at prefix/mds/index.json; use remote = bucket + prefix + /mds for StreamingDataset root.
+mds_datasets:
+  - remote: s3://d-gigachat-vision-1/users/avzavarzin/mds/test_4k/mds
+    local: /tmp/mds-test-4k-cache
+    shuffle: true
+    shuffle_seed: 42
+    cache_limit_shards: 32

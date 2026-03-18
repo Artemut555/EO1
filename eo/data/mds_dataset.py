@@ -25,6 +25,7 @@ from __future__ import annotations
 
 import io
 import logging
+import os
 import tarfile
 from typing import Any
 
@@ -40,6 +41,52 @@ from .rope2d import get_rope_index_25
 log = logging.getLogger(__name__)
 
 CODE2DTYPE = {0: np.uint16, 1: np.uint32, 2: np.int64, 3: np.int32}
+
+_mosaic_s3_virtual_patched = False
+
+
+def _patch_mosaic_s3_virtual_hosted() -> None:
+    """Mosaic StreamingDataset's S3 client omits virtual-hosted style; OBS needs it (same as mds_shard_writer)."""
+    global _mosaic_s3_virtual_patched
+    if _mosaic_s3_virtual_patched:
+        return
+    try:
+        from streaming.base.constant import DEFAULT_TIMEOUT
+        from streaming.base.storage import download as sd
+    except Exception as e:
+        log.warning("Could not patch Mosaic S3 downloader: %s", e)
+        return
+
+    _orig = sd.S3Downloader._create_s3_client
+
+    def _create_s3_client(self, unsigned: bool = False, timeout: float = DEFAULT_TIMEOUT):
+        from boto3.session import Session
+        from botocore import UNSIGNED
+        from botocore.config import Config
+
+        retries = {"mode": "adaptive"}
+        if unsigned:
+            config = Config(
+                read_timeout=timeout,
+                signature_version=UNSIGNED,
+                retries=retries,
+                s3={"addressing_style": "virtual"},
+            )
+        else:
+            config = Config(
+                read_timeout=timeout,
+                retries=retries,
+                s3={"addressing_style": "virtual"},
+            )
+        self._s3_client = Session().client(
+            "s3",
+            config=config,
+            endpoint_url=os.environ.get("S3_ENDPOINT_URL") or None,
+        )
+
+    sd.S3Downloader._create_s3_client = _create_s3_client  # type: ignore[method-assign]
+    _mosaic_s3_virtual_patched = True
+    log.debug("Patched Mosaic S3Downloader for virtual-hosted addressing")
 
 
 def _bytes_to_tensors(
@@ -98,6 +145,8 @@ class EOMDSStreamingDataset(StreamingDataset):
             raise ValueError("local cache path is required when using remote MDS")
 
         cache_limit_bytes = cache_limit_shards * 64 * 1024 * 1024 if cache_limit_shards else None
+
+        _patch_mosaic_s3_virtual_hosted()
 
         super().__init__(
             remote=remote,
